@@ -1,7 +1,7 @@
 import { ArrowRight, Github as GithubIcon } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { GoogleIcon } from '@/components/icons/google-icon';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 
 const meta = {
   title: 'Button',

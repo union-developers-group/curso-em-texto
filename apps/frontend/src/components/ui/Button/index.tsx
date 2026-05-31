@@ -36,11 +36,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <button
-      className={cn(buttonVariants({ variant, className }))}
-      data-testid="button"
-      {...props}
-    >
+    <button className={cn(buttonVariants({ variant, className }))} {...props}>
       {icon && iconPosition === 'left' && icon}
       {children}
       {icon && iconPosition === 'right' && icon}

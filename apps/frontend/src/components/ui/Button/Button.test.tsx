@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { vi } from 'vitest';
 
 describe('<Button />', () => {
@@ -14,13 +14,13 @@ describe('<Button />', () => {
   it('deve usar a variação "primary" por padrão', () => {
     render(<Button>Explorar Cursos</Button>);
 
-    expect(screen.getByTestId('button')).toHaveClass('bg-gradient-primary');
+    expect(screen.getByRole('button')).toHaveClass('bg-gradient-primary');
   });
 
   it('deve aplicar as classes da variação "secondary"', () => {
     render(<Button variant="secondary">Explorar Cursos</Button>);
 
-    expect(screen.getByTestId('button')).toHaveClass('bg-background-300');
+    expect(screen.getByRole('button')).toHaveClass('bg-background-300');
   });
 
   it('deve chamar a função de clique quando o botão é clicado', () => {
@@ -57,7 +57,7 @@ describe('<Button />', () => {
   it('deve posicionar o ícone à direita do texto por padrão', () => {
     render(<Button icon={<span data-testid="icone" />}>Cursos</Button>);
 
-    const botao = screen.getByTestId('button');
+    const botao = screen.getByRole('button');
 
     expect(botao.lastChild).toBe(screen.getByTestId('icone'));
   });
@@ -69,7 +69,7 @@ describe('<Button />', () => {
       </Button>
     );
 
-    const botao = screen.getByTestId('button');
+    const botao = screen.getByRole('button');
 
     expect(botao.firstChild).toBe(screen.getByTestId('icone'));
   });
@@ -77,18 +77,18 @@ describe('<Button />', () => {
   it('deve ter classe de hover na variação "primary"', () => {
     render(<Button variant="primary">Explorar Cursos</Button>);
 
-    expect(screen.getByTestId('button')).toHaveClass('hover:brightness-95');
+    expect(screen.getByRole('button')).toHaveClass('hover:brightness-95');
   });
 
   it('deve ter classe de hover na variação "secondary"', () => {
     render(<Button variant="secondary">Explorar Cursos</Button>);
 
-    expect(screen.getByTestId('button')).toHaveClass('hover:bg-background-200');
+    expect(screen.getByRole('button')).toHaveClass('hover:bg-background-200');
   });
 
   it('deve mesclar as classes passadas via className', () => {
     render(<Button className="w-full">Explorar Cursos</Button>);
 
-    expect(screen.getByTestId('button')).toHaveClass('w-full');
+    expect(screen.getByRole('button')).toHaveClass('w-full');
   });
 });
