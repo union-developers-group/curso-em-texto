@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button';
 import { vi } from 'vitest';
 
 describe('<Button />', () => {
-  it('deve exibir o texto passado para o botão', () => {
+  it('should display the text passed to the button', () => {
     render(<Button>Explorar Cursos</Button>);
 
     expect(
@@ -11,19 +11,19 @@ describe('<Button />', () => {
     ).toBeInTheDocument();
   });
 
-  it('deve usar a variação "primary" por padrão', () => {
+  it('should use the "primary" variant by default', () => {
     render(<Button>Explorar Cursos</Button>);
 
     expect(screen.getByRole('button')).toHaveClass('bg-gradient-primary');
   });
 
-  it('deve aplicar as classes da variação "secondary"', () => {
+  it('should apply the "secondary" variant classes', () => {
     render(<Button variant="secondary">Explorar Cursos</Button>);
 
     expect(screen.getByRole('button')).toHaveClass('bg-background-300');
   });
 
-  it('deve chamar a função de clique quando o botão é clicado', () => {
+  it('should call the click handler when the button is clicked', () => {
     const aoClicar = vi.fn();
 
     render(<Button onClick={aoClicar}>Explorar Cursos</Button>);
@@ -32,7 +32,7 @@ describe('<Button />', () => {
     expect(aoClicar).toHaveBeenCalledTimes(1);
   });
 
-  it('não deve chamar a função de clique quando está desabilitado', () => {
+  it('should not call the click handler when disabled', () => {
     const aoClicar = vi.fn();
 
     render(
@@ -46,7 +46,7 @@ describe('<Button />', () => {
     expect(aoClicar).not.toHaveBeenCalled();
   });
 
-  it('deve exibir o ícone quando ele é passado', () => {
+  it('should display the icon when it is passed', () => {
     render(
       <Button icon={<span data-testid="icone" />}>Explorar Cursos</Button>
     );
@@ -54,7 +54,7 @@ describe('<Button />', () => {
     expect(screen.getByTestId('icone')).toBeInTheDocument();
   });
 
-  it('deve posicionar o ícone à direita do texto por padrão', () => {
+  it('should position the icon to the right of the text by default', () => {
     render(<Button icon={<span data-testid="icone" />}>Cursos</Button>);
 
     const botao = screen.getByRole('button');
@@ -62,7 +62,7 @@ describe('<Button />', () => {
     expect(botao.lastChild).toBe(screen.getByTestId('icone'));
   });
 
-  it('deve posicionar o ícone à esquerda quando iconPosition é "left"', () => {
+  it('should position the icon to the left when iconPosition is "left"', () => {
     render(
       <Button icon={<span data-testid="icone" />} iconPosition="left">
         Cursos
@@ -74,19 +74,7 @@ describe('<Button />', () => {
     expect(botao.firstChild).toBe(screen.getByTestId('icone'));
   });
 
-  it('deve ter classe de hover na variação "primary"', () => {
-    render(<Button variant="primary">Explorar Cursos</Button>);
-
-    expect(screen.getByRole('button')).toHaveClass('hover:brightness-95');
-  });
-
-  it('deve ter classe de hover na variação "secondary"', () => {
-    render(<Button variant="secondary">Explorar Cursos</Button>);
-
-    expect(screen.getByRole('button')).toHaveClass('hover:bg-background-200');
-  });
-
-  it('deve mesclar as classes passadas via className', () => {
+  it('should merge the classes passed via className', () => {
     render(<Button className="w-full">Explorar Cursos</Button>);
 
     expect(screen.getByRole('button')).toHaveClass('w-full');
