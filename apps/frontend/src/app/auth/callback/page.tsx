@@ -8,9 +8,9 @@ const AuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const token = searchParams.get('token');
+  const token = searchParams.get('token');
 
+  useEffect(() => {
     if (token) {
       AuthService.saveToken(token);
       router.replace('/');
@@ -18,7 +18,7 @@ const AuthCallback = () => {
     }
 
     router.replace('/auth/sign-in');
-  }, [router, searchParams]);
+  }, [router, token]);
 
   return <p>Autenticando...</p>;
 };

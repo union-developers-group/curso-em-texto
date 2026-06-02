@@ -18,6 +18,7 @@ const SignInTemplate = ({ onSignIn }: SignInTemplateProps) => {
           alt="Ilustração do Curso em Texto"
           fill
           priority
+          sizes="(max-width: 1024px) 100vw, 1040px"
           className="-translate-y-[50px] object-contain lg:translate-y-0"
         />
       </div>
@@ -30,7 +31,7 @@ const SignInTemplate = ({ onSignIn }: SignInTemplateProps) => {
           </span>
         </div>
 
-        <h1 className="text-center text-3xl font-bold text-gray-50">
+        <h1 className="text-center text-2xl font-bold text-gray-50">
           Faça login ou inscreva-se
         </h1>
 

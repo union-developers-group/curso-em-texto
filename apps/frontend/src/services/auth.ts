@@ -23,6 +23,8 @@ export const AuthService = {
     setCookie(null, TOKEN_COOKIE_KEY, token, {
       maxAge: TOKEN_MAX_AGE,
       path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
     });
   },
 };
