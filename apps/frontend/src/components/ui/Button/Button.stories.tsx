@@ -8,6 +8,9 @@ const meta = {
   args: {
     children: 'Explorar Cursos',
     variant: 'primary',
+    icon: undefined,
+    iconPosition: 'right',
+    disabled: false,
   },
 } satisfies Meta<typeof Button>;
 
