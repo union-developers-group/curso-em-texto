@@ -1,4 +1,5 @@
 import type { CourseModelData } from '@/data/models/Course';
+import type { UserModelData } from '@/data/models/User';
 import type {
   CourseRepository,
   CreateCourseData,
@@ -44,8 +45,36 @@ export const courseManyDataMock: CourseModelData[] = [
   },
 ];
 
+export const courseAuthorMock: UserModelData = {
+  id: courseDataMock.authorId,
+  email: 'author@example.com',
+  name: 'Course Author',
+  role: 'teacher',
+  isActive: true,
+  createdAt: new Date('2025-01-15T10:30:00Z'),
+  updatedAt: new Date('2025-01-15T10:30:00Z'),
+};
+
 export class CourseRepositoryStub implements CourseRepository {
-  async create(_: CreateCourseData): Promise<CourseModelData> {
-    return courseDataMock;
+  async findAuthorById(authorId: string): Promise<UserModelData | null> {
+    return authorId === courseAuthorMock.id ? courseAuthorMock : null;
+  }
+
+  async findBySlug(slug: string): Promise<CourseModelData | null> {
+    return courseManyDataMock.find((course) => course.slug === slug) || null;
+  }
+
+  async create(data: CreateCourseData): Promise<CourseModelData> {
+    return {
+      ...courseDataMock,
+      ...data,
+      shortDescription:
+        data.shortDescription ?? courseDataMock.shortDescription,
+      tags: data.tags ?? courseDataMock.tags,
+      difficulty: data.difficulty ?? courseDataMock.difficulty,
+      estimatedHours: data.estimatedHours ?? courseDataMock.estimatedHours,
+      status: data.status ?? courseDataMock.status,
+      isPublic: data.isPublic ?? courseDataMock.isPublic,
+    };
   }
 }
