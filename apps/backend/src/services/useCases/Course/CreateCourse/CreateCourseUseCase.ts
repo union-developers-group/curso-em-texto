@@ -20,7 +20,11 @@ export class CreateCourseUseCase
   async execute(
     data: CreateCourseInputType
   ): Promise<UseCaseResponse<CourseModelData>> {
-    this.requiredFields(data);
+    const validationError = this.requiredFields(data);
+    if (validationError) {
+      return { data: null, error: validationError };
+    }
+
     const {
       title,
       description,
@@ -34,34 +38,51 @@ export class CreateCourseUseCase
     } = data;
 
     const authorExist = await this.courseRepository.findAuthorById(authorId);
-    if (!authorExist) throw new Error('Author not found.');
+    if (!authorExist) {
+      return {
+        data: null,
+        error: 'Author not found.',
+      };
+    }
 
     if (!this.validator.isValidTitle(title)) {
-      throw new Error('It must contain a title between 5 and 255 characters.');
+      return {
+        data: null,
+        error: 'It must contain a title between 5 and 255 characters.',
+      };
     }
 
     if (!this.validator.isValidDescription(description)) {
-      throw new Error(
-        'It must contain a description of at least 50 characters.'
-      );
+      return {
+        data: null,
+        error: 'It must contain a description of at least 50 characters.',
+      };
     }
 
     if (shortDescription) {
       if (!this.validator.isValidShortDescription(shortDescription)) {
-        throw new Error(
-          'ShortDescription is optional but limited to 500 characters if provided.'
-        );
+        return {
+          data: null,
+          error:
+            'ShortDescription is optional but limited to 500 characters if provided.',
+        };
       }
     }
 
     if (tags && tags.length > 10) {
-      throw new Error('It must contain no more than 10 tags.');
+      return {
+        data: null,
+        error: 'It must contain no more than 10 tags.',
+      };
     }
 
     const slug = this.generateSlug(title);
     const slugExists = await this.courseRepository.findBySlug(slug);
     if (slugExists) {
-      throw new Error('A course with this slug already exists.');
+      return {
+        data: null,
+        error: 'A course with this slug already exists.',
+      };
     }
 
     const course = await this.courseRepository.create({
@@ -77,10 +98,10 @@ export class CreateCourseUseCase
       slug,
     });
 
-    return { data: course };
+    return { data: course, error: null };
   }
 
-  private requiredFields(data: CreateCourseInputType) {
+  private requiredFields(data: CreateCourseInputType): string | null {
     const requiredFields = {
       title: 'Title is required.',
       description: 'Description is required.',
@@ -91,9 +112,11 @@ export class CreateCourseUseCase
       const value = data[field as keyof CreateCourseInputType];
 
       if (value === undefined || value === null || value === '') {
-        throw new Error(message);
+        return message;
       }
     }
+
+    return null;
   }
 
   private generateSlug(title: string): string {

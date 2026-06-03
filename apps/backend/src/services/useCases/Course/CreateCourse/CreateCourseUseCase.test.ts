@@ -107,67 +107,81 @@ describe('CreateCourseUseCase', () => {
     expect(spyOnFindAuthorById).toHaveBeenCalledWith(courseDataMock.authorId);
   });
 
-  it('should throw if author does not exist', async () => {
+  it('should return error if author does not exist', async () => {
     const { sut, courseRepositoryStub } = makeSut();
 
     vitest
       .spyOn(courseRepositoryStub, 'findAuthorById')
       .mockResolvedValueOnce(null);
 
-    await expect(sut.execute(courseDataMock)).rejects.toThrow(
-      'Author not found.'
-    );
+    const response = await sut.execute(courseDataMock);
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'Author not found.',
+    });
   });
 
-  it('should throw if authorId is not provided', async () => {
+  it('should return error if authorId is not provided', async () => {
     const { sut } = makeSut();
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        authorId: '',
-      })
-    ).rejects.toThrow('Author ID is required.');
+    const response = await sut.execute({
+      ...courseDataMock,
+      authorId: '',
+    });
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'Author ID is required.',
+    });
   });
 
-  it('should throw if title is not provided', async () => {
+  it('should return error if title is not provided', async () => {
     const { sut } = makeSut();
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        title: '',
-      })
-    ).rejects.toThrow('Title is required.');
+    const response = await sut.execute({
+      ...courseDataMock,
+      title: '',
+    });
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'Title is required.',
+    });
   });
 
-  it('should throw if description is not provided', async () => {
+  it('should return error if description is not provided', async () => {
     const { sut } = makeSut();
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        description: '',
-      })
-    ).rejects.toThrow('Description is required.');
+    const response = await sut.execute({
+      ...courseDataMock,
+      description: '',
+    });
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'Description is required.',
+    });
   });
 
-  it('should throw if title does not contain between 5 and 255 characters', async () => {
+  it('should return error if title does not contain between 5 and 255 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
     const spyOnIsValidTitle = vitest.spyOn(validatorStub, 'isValidTitle');
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        title: 'Node',
-      })
-    ).rejects.toThrow('It must contain a title between 5 and 255 characters.');
+    const response = await sut.execute({
+      ...courseDataMock,
+      title: 'Node',
+    });
 
     expect(spyOnIsValidTitle).toHaveBeenCalledWith('Node');
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'It must contain a title between 5 and 255 characters.',
+    });
   });
 
-  it('should throw if description does not contain at least 50 characters', async () => {
+  it('should return error if description does not contain at least 50 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
     const spyOnIsValidDescription = vitest.spyOn(
@@ -175,39 +189,42 @@ describe('CreateCourseUseCase', () => {
       'isValidDescription'
     );
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        description: 'Descricao curta.',
-      })
-    ).rejects.toThrow(
-      'It must contain a description of at least 50 characters.'
-    );
+    const response = await sut.execute({
+      ...courseDataMock,
+      description: 'Descricao curta.',
+    });
 
     expect(spyOnIsValidDescription).toHaveBeenCalledWith('Descricao curta.');
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'It must contain a description of at least 50 characters.',
+    });
   });
 
-  it('should throw if more than 10 tags are provided', async () => {
+  it('should return error if more than 10 tags are provided', async () => {
     const { sut } = makeSut();
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        tags: [
-          'tag-1',
-          'tag-2',
-          'tag-3',
-          'tag-4',
-          'tag-5',
-          'tag-6',
-          'tag-7',
-          'tag-8',
-          'tag-9',
-          'tag-10',
-          'tag-11',
-        ],
-      })
-    ).rejects.toThrow('It must contain no more than 10 tags.');
+    const response = await sut.execute({
+      ...courseDataMock,
+      tags: [
+        'tag-1',
+        'tag-2',
+        'tag-3',
+        'tag-4',
+        'tag-5',
+        'tag-6',
+        'tag-7',
+        'tag-8',
+        'tag-9',
+        'tag-10',
+        'tag-11',
+      ],
+    });
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'It must contain no more than 10 tags.',
+    });
   });
 
   it('should allow optional tags limited to 10 per course', async () => {
@@ -239,7 +256,7 @@ describe('CreateCourseUseCase', () => {
     );
   });
 
-  it('should throw if shortDescription contains more than 500 characters', async () => {
+  it('should return error if shortDescription contains more than 500 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
     const shortDescription = 'a'.repeat(501);
@@ -248,16 +265,17 @@ describe('CreateCourseUseCase', () => {
       'isValidShortDescription'
     );
 
-    await expect(
-      sut.execute({
-        ...courseDataMock,
-        shortDescription,
-      })
-    ).rejects.toThrow(
-      'ShortDescription is optional but limited to 500 characters if provided.'
-    );
+    const response = await sut.execute({
+      ...courseDataMock,
+      shortDescription,
+    });
 
     expect(spyOnIsValidShortDescription).toHaveBeenCalledWith(shortDescription);
+    expect(response).toStrictEqual({
+      data: null,
+      error:
+        'ShortDescription is optional but limited to 500 characters if provided.',
+    });
   });
 
   it('should allow optional shortDescription when it contains up to 500 characters', async () => {
@@ -299,16 +317,19 @@ describe('CreateCourseUseCase', () => {
     );
   });
 
-  it('should throw if a course with the same slug already exists', async () => {
+  it('should return error if a course with the same slug already exists', async () => {
     const { sut, courseRepositoryStub } = makeSut();
 
     vitest
       .spyOn(courseRepositoryStub, 'findBySlug')
       .mockResolvedValueOnce(createdCourseMock);
 
-    await expect(sut.execute(courseDataMock)).rejects.toThrow(
-      'A course with this slug already exists.'
-    );
+    const response = await sut.execute(courseDataMock);
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'A course with this slug already exists.',
+    });
   });
 
   it("should create course with status 'draft' by default", async () => {
@@ -397,6 +418,7 @@ describe('CreateCourseUseCase', () => {
 
     expect(response).toStrictEqual({
       data: createdCourseMock,
+      error: null,
     });
   });
 });
