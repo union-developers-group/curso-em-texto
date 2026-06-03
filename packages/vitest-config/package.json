@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "peerDependencies": {
-    "vitest": "^4.1.8",
-    "@vitest/coverage-istanbul": "^4.1.8",
-    "@vitest/ui": "^4.1.8"
+    "vitest": "^3.2.4 || ^4.0.0",
+    "@vitest/coverage-istanbul": "^3.2.4 || ^4.0.0",
+    "@vitest/ui": "^3.2.4 || ^4.0.0"
   }
 }

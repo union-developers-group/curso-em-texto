@@ -44,6 +44,7 @@
     "@types/node": "^20",
     "@types/react": "19.2.15",
     "@types/react-dom": "19.2.3",
+    "@vitest/coverage-istanbul": "^4.1.8",
     "@vitejs/plugin-react": "^5.0.1",
     "@vitest/browser": "^4.1.8",
     "eslint": "^9",

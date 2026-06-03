@@ -29,6 +29,8 @@
     "@curso-em-texto/eslint-config": "*",
     "@curso-em-texto/prettier-config": "*",
     "@curso-em-texto/vitest-config": "*",
+    "@vitest/coverage-istanbul": "^4.1.8",
+    "@vitest/ui": "^4.1.8",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.3.0",
     "@types/pg": "^8.15.5",
