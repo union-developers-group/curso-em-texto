@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/utils/cn';
 
 export const buttonVariants = cva(
-  'flex cursor-pointer items-center justify-center gap-2 rounded-md px-8 pt-[11.5px] pb-[12.5px] font-medium text-gray-50 transition-all focus-visible:ring-2 focus-visible:ring-gray-100 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  'flex cursor-pointer items-center justify-center gap-2 rounded-md px-8 pt-[0.71875rem] pb-[0.78125rem] font-medium text-gray-50 transition-all focus-visible:ring-2 focus-visible:ring-gray-100 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
