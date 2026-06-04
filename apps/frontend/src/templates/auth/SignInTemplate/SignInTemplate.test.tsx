@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import SignInTemplate from '@/templates/auth/SignInTemplate';
+import { SignInTemplate } from '@/templates/auth/SignInTemplate';
 import { vitest } from 'vitest';
 
 describe('<SignInTemplate />', () => {

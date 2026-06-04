@@ -3,7 +3,6 @@
 import { AuthService, OAuthProvider } from '@/services/auth';
 import { createContext, useContext } from 'react';
 
-// TODO: adicionar `user` e estado de autenticação quando o endpoint /me existir no backend
 interface IAuthContext {
   login: (provider: OAuthProvider) => void;
   logout: () => void;
