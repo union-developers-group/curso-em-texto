@@ -75,6 +75,7 @@ apps/frontend/src/
 - **Strict Mode**: Sempre habilitado
 - **Type Safety**: Tipagem explícita em todas as interfaces públicas
 - **Imports**: Use imports absolutos com alias `@/`
+- **Exports**: Prefira **export named** sempre que possível. Apenas páginas do Next.js (`src/app/**/page.tsx`) devem usar `export default`, pois é exigência do framework. Todos os demais arquivos (componentes, templates, hooks, utils, funções, tipos, etc.) devem ser exportados com `export` nomeado.
 
 #### Nomenclatura
 
