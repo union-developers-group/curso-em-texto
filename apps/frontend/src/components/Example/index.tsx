@@ -47,7 +47,7 @@ export const Example = ({ githubURL, size, className }: ExampleProps) => {
         </div>
       </div>
       <div className="flex gap-1 text-sm text-gray-400">
-        <Link href="/auth/sign-in" className="ml-auto text-sm text-gray-400">
+        <Link href="/login" className="ml-auto text-sm text-gray-400">
           Faça login
         </Link>
       </div>

@@ -17,7 +17,7 @@ const AuthCallback = () => {
       return;
     }
 
-    router.replace('/auth/sign-in');
+    router.replace('/login');
   }, [router, token]);
 
   return <p>Autenticando...</p>;

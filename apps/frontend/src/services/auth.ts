@@ -11,14 +11,17 @@ export const AuthService = {
   signIn: (provider: OAuthProvider) => {
     window.location.href = `${api.defaults.baseURL}/auth/${provider}`;
   },
+
   signOut: () => {
     destroyCookie(null, TOKEN_COOKIE_KEY, { path: '/' });
   },
+
   getToken: () => {
     const cookies = parseCookies();
 
     return cookies[TOKEN_COOKIE_KEY] ?? null;
   },
+
   saveToken: (token: string) => {
     setCookie(null, TOKEN_COOKIE_KEY, token, {
       maxAge: TOKEN_MAX_AGE,
