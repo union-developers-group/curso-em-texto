@@ -41,7 +41,7 @@ jobs:
         run: npx turbo run build --affected --parallel
 
       - name: Run tests on affected packages
-        run: npx turbo run test --affected --parallel
+        run: npx turbo run test:ci --affected --parallel
 
       - name: Packages audit
         run: npm audit --audit-level=high
