@@ -3,6 +3,7 @@ import { Github } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/utils/cn';
+import Link from 'next/link';
 
 export const exampleVariants = cva(
   'flex flex-col justify-center items-center bg-background-400 rounded-lg border border-background-200 mt-2',
@@ -44,6 +45,11 @@ export const Example = ({ githubURL, size, className }: ExampleProps) => {
             Contribua no Github
           </a>
         </div>
+      </div>
+      <div className="flex gap-1 text-sm text-gray-400">
+        <Link href="/login" className="ml-auto text-sm text-gray-400">
+          Faça login
+        </Link>
       </div>
     </div>
   );
