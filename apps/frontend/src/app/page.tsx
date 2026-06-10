@@ -1,8 +1,11 @@
-import { ExampleTemplate } from '@/templates/ExampleTemplate';
-import { exampleTemplateMock } from '@/templates/ExampleTemplate/ExampleTemplate.mock';
+import { Hero } from '@/components/shared/Hero';
 
-export default function Home() {
-  const exampleData = exampleTemplateMock;
+const HomePage = () => {
+  return (
+    <main>
+      <Hero />
+    </main>
+  );
+};
 
-  return <ExampleTemplate {...exampleData} />;
-}
+export default HomePage;
