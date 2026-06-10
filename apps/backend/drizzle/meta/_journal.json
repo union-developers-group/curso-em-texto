@@ -50,6 +50,20 @@
       "when": 1780445471340,
       "tag": "0006_cool_tiger_shark",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781055594341,
+      "tag": "0007_chunky_praxagora",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1781130293809,
+      "tag": "0008_brief_kitty_pryde",
+      "breakpoints": true
     }
   ]
 }
