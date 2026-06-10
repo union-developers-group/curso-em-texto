@@ -1,11 +1,7 @@
-import { Hero } from '@/components/shared/Hero';
+import { HomeTemplate } from '@/templates/HomeTemplate';
 
 const HomePage = () => {
-  return (
-    <main>
-      <Hero />
-    </main>
-  );
+  return <HomeTemplate />;
 };
 
 export default HomePage;

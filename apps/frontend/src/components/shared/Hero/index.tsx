@@ -2,12 +2,17 @@ import { Button } from '@/components/ui/Button';
 import { BookOpen } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
-export const Hero = () => {
+export interface HeroProps {
+  className?: string;
+}
+
+export const Hero = ({ className }: HeroProps) => {
   return (
     <section
       aria-labelledby="hero-title"
       className={cn(
-        'flex min-h-[33.75rem] w-full items-center justify-center bg-background-400 px-6 py-20 text-center sm:px-8 md:px-12 lg:px-20 xl:py-36'
+        'flex min-h-[33.75rem] w-full items-center justify-center bg-background-400 px-6 py-20 text-center sm:px-8 md:px-12 lg:px-20 xl:py-36',
+        className
       )}
     >
       <div className="mx-auto flex w-full max-w-[48rem] flex-col items-center gap-6">
