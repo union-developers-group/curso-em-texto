@@ -42,6 +42,10 @@
   color: transparent;
 }
 
+.icon-primary {
+  color: #3C83F6;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
