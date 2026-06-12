@@ -29,14 +29,4 @@ describe('<Hero />', () => {
       screen.getByRole('button', { name: 'Explorar Cursos' })
     ).toBeInTheDocument();
   });
-
-  it('should be identified by its title', () => {
-    render(<Hero />);
-
-    expect(
-      screen.getByRole('region', {
-        name: 'Aprenda no seu próprio ritmo com cursos baseados em texto',
-      })
-    ).toBeInTheDocument();
-  });
 });

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/Button';
-import { BookOpen } from 'lucide-react';
+import { Book } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 export interface HeroProps {
@@ -27,7 +27,7 @@ export const Hero = ({ className }: HeroProps) => {
           Uma plataforma para aprendizado sem distrações. Foque no que importa.
         </p>
 
-        <Button icon={<BookOpen size={16} aria-hidden="true" />}>
+        <Button icon={<Book size={16} aria-hidden="true" />}>
           Explorar Cursos
         </Button>
       </div>
