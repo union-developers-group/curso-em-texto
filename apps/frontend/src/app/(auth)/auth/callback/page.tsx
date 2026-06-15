@@ -7,7 +7,7 @@ import { Suspense, useEffect } from 'react';
 
 const AuthCallbackLoading = () => (
   <main className="flex min-h-screen items-center justify-center bg-background-500">
-    <Loading size="lg" color="#10B77F" />
+    <Loading size="lg" className="text-emerald-500" />
   </main>
 );
 

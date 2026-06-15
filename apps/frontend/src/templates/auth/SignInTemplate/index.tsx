@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/Button';
 import { Loading } from '@/components/ui/Loading';
+import { Button } from '@/components/ui/Button';
 import { OAuthProvider } from '@/services/auth';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 export interface SignInTemplateProps {
   onSignIn: (provider: OAuthProvider) => void;
