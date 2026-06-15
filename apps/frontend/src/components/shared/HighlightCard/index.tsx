@@ -40,11 +40,30 @@ export const HighlightCard = ({
       className={cn(highlightCardVariants({ size, className }))}
       data-testid="highlight-card"
     >
+      <svg width="0" height="0" aria-hidden="true" className="absolute">
+        <defs>
+          <linearGradient
+            id="icon-gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop offset="0%" stopColor="#3C83F6" />
+            <stop offset="100%" stopColor="#10B77F" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div
         className="flex h-10 w-10 items-center justify-center rounded-lg border border-background-200 bg-background-300"
         data-testid="highlight-card-icon"
       >
-        <Icon className="h-5 w-5 icon-primary" aria-hidden="true" />
+        <Icon
+          className="h-5 w-5"
+          style={{ stroke: 'url(#icon-gradient)' }}
+          aria-hidden="true"
+        />
       </div>
 
       <h3
