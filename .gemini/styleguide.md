@@ -332,7 +332,7 @@ describe('CreateExampleUseCase', () => {
 
 - **Componentes**: Teste comportamento, não implementação
 - **Nomenclatura**: `[Component].test.tsx`
-- **Queries**: Use queries semânticas (getByRole, getByText, etc.)
+- **Queries**: Priorize `getByRole` como seletor principal. Use `getByText`, `getByPlaceholderText` ou `getByLabelText` como alternativa. **Evite `getByTestId`** — ele deve ser usado apenas como último recurso quando nenhuma outra query semântica for viável, pois testa implementação em vez de comportamento acessível.
 - **Mocks**: Use mocks para dados de exemplo
 
 #### Exemplo de Teste
