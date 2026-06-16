@@ -48,6 +48,18 @@ const setupCreateCourseControllerTest = () => {
 };
 
 describe('CreateCourseController', () => {
+  it.each([undefined, null, 'invalid-input'])(
+    'should return status code 401 if input is not a valid object',
+    async (input) => {
+      const { sut } = setupCreateCourseControllerTest();
+
+      const response = await sut.handle(input);
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toStrictEqual(new Error('Unauthorized'));
+    }
+  );
+
   it('should return status code 401 if user is not authenticated', async () => {
     const { sut, requestMock } = setupCreateCourseControllerTest();
 
