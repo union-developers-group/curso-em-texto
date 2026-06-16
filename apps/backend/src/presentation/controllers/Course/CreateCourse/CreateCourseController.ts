@@ -26,6 +26,13 @@ export class CreateCourseController implements Controller {
   ) {}
 
   async handle(input: unknown) {
+    if (!input || typeof input !== 'object') {
+      return {
+        statusCode: 401,
+        body: new Error('Unauthorized'),
+      };
+    }
+
     const request = input as CreateCourseRequest;
 
     if (!request.userId) {
@@ -83,7 +90,10 @@ export class CreateCourseController implements Controller {
         statusCode: 201,
         body: data,
       };
-    } catch {
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+
       return {
         statusCode: 500,
         body: new Error('Server error'),
