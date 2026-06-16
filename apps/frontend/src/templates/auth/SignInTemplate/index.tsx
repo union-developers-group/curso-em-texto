@@ -1,5 +1,7 @@
+import { Loading } from '@/components/ui/Loading';
 import { Button } from '@/components/ui/Button';
 import { OAuthProvider } from '@/services/auth';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,6 +10,16 @@ export interface SignInTemplateProps {
 }
 
 export const SignInTemplate = ({ onSignIn }: SignInTemplateProps) => {
+  const [loadingProvider, setLoadingProvider] = useState<OAuthProvider | null>(
+    null
+  );
+  const isSigningIn = loadingProvider !== null;
+
+  const handleSignIn = (provider: OAuthProvider) => {
+    setLoadingProvider(provider);
+    onSignIn(provider);
+  };
+
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background-500 p-6 lg:flex-row lg:px-16">
       <div className="relative order-first h-[21.875rem] w-full max-w-[37.5rem] lg:order-last lg:-ml-[3.75rem] lg:mt-[3.125rem] lg:h-[51.25rem] lg:w-[65rem]">
@@ -35,10 +47,18 @@ export const SignInTemplate = ({ onSignIn }: SignInTemplateProps) => {
         <div className="flex flex-col gap-6">
           <Button
             variant="secondary"
-            icon={<Image src="/mdi_github.svg" alt="" width={20} height={20} />}
+            icon={
+              loadingProvider === 'github' ? (
+                <Loading size="sm" className="h-5 w-5 text-gray-50" />
+              ) : (
+                <Image src="/mdi_github.svg" alt="" width={20} height={20} />
+              )
+            }
             iconPosition="left"
             className="w-full"
-            onClick={() => onSignIn('github')}
+            disabled={isSigningIn}
+            aria-busy={loadingProvider === 'github'}
+            onClick={() => handleSignIn('github')}
           >
             Continuar com o GitHub
           </Button>
@@ -46,11 +66,22 @@ export const SignInTemplate = ({ onSignIn }: SignInTemplateProps) => {
           <Button
             variant="secondary"
             icon={
-              <Image src="/ri_google-fill.svg" alt="" width={20} height={20} />
+              loadingProvider === 'google' ? (
+                <Loading size="sm" className="h-5 w-5 text-gray-50" />
+              ) : (
+                <Image
+                  src="/ri_google-fill.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              )
             }
             iconPosition="left"
             className="w-full"
-            onClick={() => onSignIn('google')}
+            disabled={isSigningIn}
+            aria-busy={loadingProvider === 'google'}
+            onClick={() => handleSignIn('google')}
           >
             Continuar com o Google
           </Button>

@@ -39,4 +39,23 @@ describe('<SignInTemplate />', () => {
 
     expect(onSignIn).toHaveBeenCalledWith('google');
   });
+
+  it('should render loading state only for the selected provider', () => {
+    const onSignIn = vitest.fn();
+
+    render(<SignInTemplate onSignIn={onSignIn} />);
+
+    const githubButton = screen.getByRole('button', { name: /GitHub/i });
+    const googleButton = screen.getByRole('button', { name: /Google/i });
+
+    fireEvent.click(googleButton);
+
+    expect(githubButton).toBeDisabled();
+    expect(githubButton).toHaveAttribute('aria-busy', 'false');
+    expect(googleButton).toBeDisabled();
+    expect(googleButton).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getAllByRole('status', { name: 'Carregando' })).toHaveLength(
+      1
+    );
+  });
 });
