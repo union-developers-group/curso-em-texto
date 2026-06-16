@@ -1,8 +1,7 @@
-import { ExampleTemplate } from '@/templates/ExampleTemplate';
-import { exampleTemplateMock } from '@/templates/ExampleTemplate/ExampleTemplate.mock';
+import { HomeTemplate } from '@/templates/HomeTemplate';
 
-export default function Home() {
-  const exampleData = exampleTemplateMock;
+const HomePage = () => {
+  return <HomeTemplate />;
+};
 
-  return <ExampleTemplate {...exampleData} />;
-}
+export default HomePage;
