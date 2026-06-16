@@ -22,4 +22,5 @@ export interface CourseRepository {
   create(data: CreateCourseData): Promise<CourseModelData>;
   findAuthorById(authorId: string): Promise<UserModelData | null>;
   findBySlug(slug: string): Promise<CourseModelData | null>;
+  findById(id: string): Promise<CourseModelData | null>;
 }

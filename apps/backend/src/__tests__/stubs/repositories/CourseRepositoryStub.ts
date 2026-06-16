@@ -56,6 +56,10 @@ export const courseAuthorMock: UserModelData = {
 };
 
 export class CourseRepositoryStub implements CourseRepository {
+  async findById(id: string): Promise<CourseModelData | null> {
+    return courseManyDataMock.find((course) => course.id === id) || null;
+  }
+
   async findAuthorById(authorId: string): Promise<UserModelData | null> {
     return authorId === courseAuthorMock.id ? courseAuthorMock : null;
   }

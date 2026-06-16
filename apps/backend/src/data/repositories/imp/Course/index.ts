@@ -34,4 +34,14 @@ export class CourseRepositoryImp implements CourseRepository {
 
     return result[0] ?? null;
   }
+
+  async findById(id: string): Promise<CourseModelData | null> {
+    const result = await db
+      .select()
+      .from(coursesTable)
+      .where(eq(coursesTable.id, id))
+      .limit(1);
+
+    return result[0] ?? null;
+  }
 }
