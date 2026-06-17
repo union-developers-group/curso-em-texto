@@ -32,8 +32,12 @@ describe('<CTA />', () => {
   });
 
   it('should apply a custom className', () => {
-    const { container } = render(<CTA className="custom-class" />);
+    render(<CTA className="custom-class" />);
 
-    expect(container.firstChild).toHaveClass('custom-class');
+    const section = screen.getByRole('region', {
+      name: 'Pronto para começar a aprender?',
+    });
+
+    expect(section).toHaveClass('custom-class');
   });
 });
