@@ -22,8 +22,7 @@ export const buttonVariants = cva(
 export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    ButtonVariants {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {
   icon?: ReactNode;
   iconPosition?: 'left' | 'right';
   className?: string;

@@ -21,8 +21,7 @@ export const loadingVariants = cva(
 export type LoadingVariants = VariantProps<typeof loadingVariants>;
 
 export interface LoadingProps
-  extends HTMLAttributes<HTMLDivElement>,
-    LoadingVariants {
+  extends HTMLAttributes<HTMLDivElement>, LoadingVariants {
   color?: string;
   className?: string;
 }
