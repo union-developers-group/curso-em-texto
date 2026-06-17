@@ -13,4 +13,5 @@ export interface UserRepository {
   create(data: CreateUserData): Promise<UserModelData>;
   findByEmail(email: string): Promise<UserModelData | null>;
   update(id: string, data: Partial<UserModelData>): Promise<UserModelData>;
+  findById(id: string): Promise<UserModelData | null>;
 }

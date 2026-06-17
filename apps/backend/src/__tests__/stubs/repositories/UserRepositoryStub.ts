@@ -42,4 +42,8 @@ export class UserRepositoryStub implements UserRepository {
   async update(_: string, __: Partial<UserModelData>): Promise<UserModelData> {
     return Promise.resolve(userGoogleProviderMock);
   }
+
+  async findById(id: string): Promise<UserModelData | null> {
+    return usersMock.find((user) => user.id === id) || null;
+  }
 }
