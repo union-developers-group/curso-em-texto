@@ -1,11 +1,12 @@
 import { coursesTable, usersTable, db } from '@/data';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import type { CourseModelData } from '@/data/models/Course';
 import { UserModelData } from '@/data/models/User';
 import type {
   CourseRepository,
   CreateCourseData,
+  UpdateCourseDetailsData,
 } from '@/data/repositories/interfaces/CourseRepository';
 
 export class CourseRepositoryImp implements CourseRepository {
@@ -33,5 +34,43 @@ export class CourseRepositoryImp implements CourseRepository {
       .limit(1);
 
     return result[0] ?? null;
+  }
+
+  async findById(courseId: string): Promise<CourseModelData | null> {
+    const result = await db
+      .select()
+      .from(coursesTable)
+      .where(eq(coursesTable.id, courseId))
+      .limit(1);
+
+    return result[0] ?? null;
+  }
+
+  async findByIdAndAuthorId(
+    courseId: string,
+    authorId: string
+  ): Promise<CourseModelData | null> {
+    const result = await db
+      .select()
+      .from(coursesTable)
+      .where(
+        and(eq(coursesTable.id, courseId), eq(coursesTable.authorId, authorId))
+      )
+      .limit(1);
+
+    return result[0] ?? null;
+  }
+
+  async updateDetails(
+    courseId: string,
+    data: UpdateCourseDetailsData
+  ): Promise<CourseModelData> {
+    const [result] = await db
+      .update(coursesTable)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(coursesTable.id, courseId))
+      .returning();
+
+    return result;
   }
 }

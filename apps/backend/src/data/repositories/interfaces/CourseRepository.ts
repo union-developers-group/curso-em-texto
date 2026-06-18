@@ -18,8 +18,26 @@ export interface CreateCourseData {
   isPublic?: boolean;
 }
 
+export interface UpdateCourseDetailsData {
+  title?: string;
+  description?: string;
+  shortDescription?: string | null;
+  tags?: string[] | null;
+  difficulty?: CourseDifficulty;
+  estimatedHours?: number;
+}
+
 export interface CourseRepository {
   create(data: CreateCourseData): Promise<CourseModelData>;
   findAuthorById(authorId: string): Promise<UserModelData | null>;
   findBySlug(slug: string): Promise<CourseModelData | null>;
+  findById(courseId: string): Promise<CourseModelData | null>;
+  findByIdAndAuthorId(
+    courseId: string,
+    authorId: string
+  ): Promise<CourseModelData | null>;
+  updateDetails(
+    courseId: string,
+    data: UpdateCourseDetailsData
+  ): Promise<CourseModelData>;
 }

@@ -3,6 +3,7 @@ import type { UserModelData } from '@/data/models/User';
 import type {
   CourseRepository,
   CreateCourseData,
+  UpdateCourseDetailsData,
 } from '@/data/repositories/interfaces/CourseRepository';
 
 export const courseDataMock: CourseModelData = {
@@ -64,6 +65,21 @@ export class CourseRepositoryStub implements CourseRepository {
     return courseManyDataMock.find((course) => course.slug === slug) || null;
   }
 
+  async findById(courseId: string): Promise<CourseModelData | null> {
+    return courseManyDataMock.find((course) => course.id === courseId) || null;
+  }
+
+  async findByIdAndAuthorId(
+    courseId: string,
+    authorId: string
+  ): Promise<CourseModelData | null> {
+    return (
+      courseManyDataMock.find(
+        (course) => course.id === courseId && course.authorId === authorId
+      ) || null
+    );
+  }
+
   async create(data: CreateCourseData): Promise<CourseModelData> {
     return {
       ...courseDataMock,
@@ -75,6 +91,20 @@ export class CourseRepositoryStub implements CourseRepository {
       estimatedHours: data.estimatedHours ?? courseDataMock.estimatedHours,
       status: data.status ?? courseDataMock.status,
       isPublic: data.isPublic ?? courseDataMock.isPublic,
+    };
+  }
+
+  async updateDetails(
+    courseId: string,
+    data: UpdateCourseDetailsData
+  ): Promise<CourseModelData> {
+    return {
+      ...courseDataMock,
+      ...data,
+      id: courseId,
+      status: courseDataMock.status,
+      isPublic: courseDataMock.isPublic,
+      authorId: courseDataMock.authorId,
     };
   }
 }

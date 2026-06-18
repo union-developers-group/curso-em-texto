@@ -3,6 +3,7 @@ import type { UserModelData } from '@/data/models/User';
 import type {
   CourseRepository,
   CreateCourseData,
+  UpdateCourseDetailsData,
 } from '@/data/repositories/interfaces/CourseRepository';
 import type { Validator } from '@/services/contracts/Validator';
 
@@ -77,6 +78,24 @@ class CourseRepositoryStub implements CourseRepository {
 
   async findBySlug(): Promise<CourseModelData | null> {
     return null;
+  }
+
+  async findById(): Promise<CourseModelData | null> {
+    return createdCourseMock;
+  }
+
+  async findByIdAndAuthorId(): Promise<CourseModelData | null> {
+    return createdCourseMock;
+  }
+
+  async updateDetails(
+    _: string,
+    data: UpdateCourseDetailsData
+  ): Promise<CourseModelData> {
+    return {
+      ...createdCourseMock,
+      ...data,
+    };
   }
 }
 
