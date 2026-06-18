@@ -98,12 +98,29 @@ export class UpdateCourseDetailsUseCase
       };
     }
 
+    if (
+      data.estimatedHours !== undefined &&
+      (data.estimatedHours < 0 || !Number.isInteger(data.estimatedHours))
+    ) {
+      return {
+        data: null,
+        error: 'Estimated hours must be a non-negative integer.',
+      };
+    }
+
     const updateData = this.getUpdateData(data);
 
     const updatedCourse = await this.courseRepository.updateDetails(
       data.courseId,
       updateData
     );
+
+    if (!updatedCourse) {
+      return {
+        data: null,
+        error: 'Failed to update course details.',
+      };
+    }
 
     return { data: updatedCourse, error: null };
   }

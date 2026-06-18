@@ -39,5 +39,5 @@ export interface CourseRepository {
   updateDetails(
     courseId: string,
     data: UpdateCourseDetailsData
-  ): Promise<CourseModelData>;
+  ): Promise<CourseModelData | null>;
 }

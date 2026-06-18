@@ -7,14 +7,14 @@ import type {
 } from '@/data/repositories/interfaces/CourseRepository';
 
 export const courseDataMock: CourseModelData = {
-  id: '1234',
+  id: crypto.randomUUID(),
   title: 'JavaScript Moderno',
   slug: 'javascript-moderno',
   description:
     'Aprenda JavaScript do básico ao avançado com exemplos práticos e projetos reais que vão te preparar para o mercado de trabalho.',
   shortDescription:
     'Curso completo de JavaScript para iniciantes e intermediários',
-  authorId: '5678',
+  authorId: crypto.randomUUID(),
   tags: ['javascript', 'programacao', 'web'],
   difficulty: 'beginner',
   estimatedHours: 40,
@@ -28,13 +28,13 @@ export const courseDataMock: CourseModelData = {
 export const courseManyDataMock: CourseModelData[] = [
   { ...courseDataMock },
   {
-    id: '5678',
+    id: crypto.randomUUID(),
     title: 'React Hooks Avançado',
     slug: 'react-hooks-avancado',
     description:
       'Domine os React Hooks e modernize suas aplicações React com as melhores práticas do mercado.',
     shortDescription: 'Curso avançado de React Hooks',
-    authorId: '1234',
+    authorId: crypto.randomUUID(),
     tags: ['react', 'hooks', 'javascript'],
     difficulty: 'advanced',
     estimatedHours: 25,
@@ -97,7 +97,7 @@ export class CourseRepositoryStub implements CourseRepository {
   async updateDetails(
     courseId: string,
     data: UpdateCourseDetailsData
-  ): Promise<CourseModelData> {
+  ): Promise<CourseModelData | null> {
     return {
       ...courseDataMock,
       ...data,

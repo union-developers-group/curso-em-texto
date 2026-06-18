@@ -13,13 +13,13 @@ import {
 } from './UpdateCourseDetailsUseCase';
 
 const courseMock: CourseModelData = {
-  id: 'course-id',
+  id: crypto.randomUUID(),
   title: 'Curso Completo de Node.js',
   slug: 'curso-completo-de-nodejs',
   description:
     'Descricao completa do curso com conteudo suficiente para validar a regra de tamanho minimo.',
   shortDescription: 'Curso pratico de Node.js para backend.',
-  authorId: 'author-id',
+  authorId: crypto.randomUUID(),
   tags: ['node', 'typescript'],
   difficulty: 'beginner',
   estimatedHours: 20,
@@ -41,7 +41,7 @@ const authorMock: UserModelData = {
 };
 
 const adminMock: UserModelData = {
-  id: 'admin-id',
+  id: crypto.randomUUID(),
   email: 'admin@example.com',
   name: 'Course Admin',
   role: 'admin',
@@ -116,7 +116,7 @@ class CourseRepositoryStub implements CourseRepository {
   async updateDetails(
     courseId: string,
     data: UpdateCourseDetailsData
-  ): Promise<CourseModelData> {
+  ): Promise<CourseModelData | null> {
     return {
       ...courseMock,
       ...data,
@@ -340,6 +340,25 @@ describe('UpdateCourseDetailsUseCase', () => {
     });
   });
 
+  it('should return error if course details update fails', async () => {
+    const { sut, courseRepositoryStub } = makeSut();
+
+    vitest
+      .spyOn(courseRepositoryStub, 'updateDetails')
+      .mockResolvedValueOnce(null);
+
+    const response = await sut.execute({
+      courseId: courseMock.id,
+      requesterId: courseMock.authorId,
+      title: 'Curso Atualizado de Node.js',
+    });
+
+    expect(response).toStrictEqual({
+      data: null,
+      error: 'Failed to update course details.',
+    });
+  });
+
   it('should return error if title does not contain between 5 and 255 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
@@ -481,6 +500,30 @@ describe('UpdateCourseDetailsUseCase', () => {
       estimatedHours: 32,
     });
   });
+
+  it.each([-1, 1.5])(
+    'should return error if estimatedHours is not a non-negative integer',
+    async (estimatedHours) => {
+      const { sut, courseRepositoryStub } = makeSut();
+
+      const spyOnUpdateDetails = vitest.spyOn(
+        courseRepositoryStub,
+        'updateDetails'
+      );
+
+      const response = await sut.execute({
+        courseId: courseMock.id,
+        requesterId: courseMock.authorId,
+        estimatedHours,
+      });
+
+      expect(spyOnUpdateDetails).not.toHaveBeenCalled();
+      expect(response).toStrictEqual({
+        data: null,
+        error: 'Estimated hours must be a non-negative integer.',
+      });
+    }
+  );
 
   it('should return error if difficulty is invalid', async () => {
     const { sut } = makeSut();

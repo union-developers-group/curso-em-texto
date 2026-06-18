@@ -64,13 +64,13 @@ export class CourseRepositoryImp implements CourseRepository {
   async updateDetails(
     courseId: string,
     data: UpdateCourseDetailsData
-  ): Promise<CourseModelData> {
+  ): Promise<CourseModelData | null> {
     const [result] = await db
       .update(coursesTable)
       .set({ ...data, updatedAt: new Date() })
       .where(eq(coursesTable.id, courseId))
       .returning();
 
-    return result;
+    return result ?? null;
   }
 }

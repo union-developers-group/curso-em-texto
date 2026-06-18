@@ -13,7 +13,7 @@ import {
 } from './CreateCourseUseCase';
 
 const authorMock: UserModelData = {
-  id: 'author-id',
+  id: crypto.randomUUID(),
   email: 'author@example.com',
   name: 'Course Author',
   role: 'teacher',
@@ -30,7 +30,7 @@ const courseDataMock: CreateCourseInputType = {
 };
 
 const createdCourseMock: CourseModelData = {
-  id: 'course-id',
+  id: crypto.randomUUID(),
   title: courseDataMock.title,
   slug: 'curso-completo-de-nodejs',
   description: courseDataMock.description,
@@ -91,7 +91,7 @@ class CourseRepositoryStub implements CourseRepository {
   async updateDetails(
     _: string,
     data: UpdateCourseDetailsData
-  ): Promise<CourseModelData> {
+  ): Promise<CourseModelData | null> {
     return {
       ...createdCourseMock,
       ...data,
