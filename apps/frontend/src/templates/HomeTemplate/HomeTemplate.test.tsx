@@ -17,6 +17,16 @@ describe('<HomeTemplate />', () => {
     expect(screen.getByRole('region', { name: 'Hero' })).toBeInTheDocument();
   });
 
+  it('should render the CTA section', () => {
+    render(<HomeTemplate />);
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Pronto para começar a aprender?',
+      })
+    ).toBeInTheDocument();
+  });
+
   it('should render the Footer component', () => {
     render(<HomeTemplate />);
 
