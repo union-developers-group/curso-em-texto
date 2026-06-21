@@ -39,6 +39,7 @@ export type CourseStructureResponse = {
     lessons: {
       id: string;
       title: string;
+      content: string;
       order: number;
     }[];
   }[];
@@ -195,8 +196,10 @@ export class UpdateCourseStructureUseCase
       }
     }
 
+    const responseData = await this.buildCourseStructureResponse(data.courseId);
+
     return {
-      data: null,
+      data: responseData,
       error: null,
     };
   }
@@ -302,5 +305,34 @@ export class UpdateCourseStructureUseCase
     return currentLessons.filter(
       (lesson) => !payloadLessonsIds.includes(lesson.id)
     );
+  }
+
+  private async buildCourseStructureResponse(
+    courseId: string
+  ): Promise<CourseStructureResponse> {
+    const modules = await this.moduleRepository.findByCourseId(courseId);
+
+    const responseModules: CourseStructureResponse['modules'] = [];
+
+    for (const module of modules) {
+      const lessons = await this.lessonRepository.findByModuleId(module.id);
+
+      responseModules.push({
+        id: module.id,
+        title: module.title,
+        order: module.order,
+        lessons: lessons.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.title,
+          content: lesson.content,
+          order: lesson.order,
+        })),
+      });
+    }
+
+    return {
+      courseId: courseId,
+      modules: responseModules,
+    };
   }
 }

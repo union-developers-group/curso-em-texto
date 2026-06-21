@@ -166,10 +166,8 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [existingModuleInputMock],
     });
 
-    expect(response).toStrictEqual({
-      data: null,
-      error: null,
-    });
+    expect(response.error).toBeNull();
+    expect(response.data).not.toBeNull();
   });
 
   it('should return success if the user is author', async () => {
@@ -189,10 +187,8 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [existingModuleInputMock],
     });
 
-    expect(response).toStrictEqual({
-      data: null,
-      error: null,
-    });
+    expect(response.error).toBeNull();
+    expect(response.data).not.toBeNull();
   });
 
   it('should return error if contains modules with same title', async () => {
@@ -525,5 +521,43 @@ describe('UpdateCourseStructureUseCase', () => {
     });
 
     expect(deleteSpy).toHaveBeenCalledWith(lessonDataMock.id);
+  });
+
+  it('should return updated course structure', async () => {
+    const { sut, userRepositoryStub, courseRepositoryStub } = makeSut();
+
+    vitest
+      .spyOn(userRepositoryStub, 'findById')
+      .mockResolvedValueOnce(authorUserMock);
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
+
+    const response = await sut.execute({
+      courseId: courseMock.id,
+      userId: authorUserMock.id,
+      modules: [existingModuleInputMock],
+    });
+
+    expect(response.error).toBeNull();
+    expect(response.data).toStrictEqual({
+      courseId: courseMock.id,
+      modules: [
+        {
+          id: moduleDataMock.id,
+          title: moduleDataMock.title,
+          order: moduleDataMock.order,
+          lessons: [
+            {
+              id: lessonDataMock.id,
+              title: lessonDataMock.title,
+              content: lessonDataMock.content,
+              order: lessonDataMock.order,
+            },
+          ],
+        },
+      ],
+    });
   });
 });
