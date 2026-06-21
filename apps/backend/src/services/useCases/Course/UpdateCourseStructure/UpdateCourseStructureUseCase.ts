@@ -1,4 +1,5 @@
 import { CourseModelData } from '@/data/models/Course';
+import { LessonModelData } from '@/data/models/Lesson';
 import { ModuleModelData } from '@/data/models/Module';
 import { UserModelData } from '@/data/models/User';
 
@@ -129,11 +130,21 @@ export class UpdateCourseStructureUseCase
     const modulesToUpdate = this.getModulesToUpdate(data.modules);
 
     for (const module of modulesToCreate) {
-      await this.moduleRepository.create({
+      const createdModule = await this.moduleRepository.create({
         courseId: data.courseId,
         title: module.title,
         order: module.order,
       });
+
+      for (const lesson of module.lessons) {
+        await this.lessonRepository.create({
+          courseId: data.courseId,
+          moduleId: createdModule.id,
+          title: lesson.title,
+          content: lesson.content,
+          order: lesson.order,
+        });
+      }
     }
 
     for (const module of modulesToUpdate) {
@@ -145,6 +156,43 @@ export class UpdateCourseStructureUseCase
         title: module.title,
         order: module.order,
       });
+
+      const currentLessons = await this.lessonRepository.findByModuleId(
+        module.id
+      );
+
+      const lessonsToCreate = this.getLessonsToCreate(module.lessons);
+      const lessonsToUpdate = this.getLessonsToUpdate(module.lessons);
+      const lessonsToDelete = this.getLessonsToDelete(
+        currentLessons,
+        module.lessons
+      );
+
+      for (const lesson of lessonsToCreate) {
+        await this.lessonRepository.create({
+          courseId: data.courseId,
+          moduleId: module.id,
+          title: lesson.title,
+          content: lesson.content,
+          order: lesson.order,
+        });
+      }
+
+      for (const lesson of lessonsToUpdate) {
+        if (!lesson.id) {
+          continue;
+        }
+
+        await this.lessonRepository.update(lesson.id, {
+          title: lesson.title,
+          order: lesson.order,
+          content: lesson.content,
+        });
+      }
+
+      for (const lesson of lessonsToDelete) {
+        await this.lessonRepository.delete(lesson.id);
+      }
     }
 
     return {
@@ -229,5 +277,30 @@ export class UpdateCourseStructureUseCase
     }
 
     return null;
+  }
+
+  private getLessonsToCreate(
+    lessons: CourseStructureLessonInput[]
+  ): CourseStructureLessonInput[] {
+    return lessons.filter((lesson) => !lesson.id);
+  }
+
+  private getLessonsToUpdate(
+    lessons: CourseStructureLessonInput[]
+  ): CourseStructureLessonInput[] {
+    return lessons.filter((lesson) => lesson.id);
+  }
+
+  private getLessonsToDelete(
+    currentLessons: LessonModelData[],
+    lessons: CourseStructureLessonInput[]
+  ): LessonModelData[] {
+    const payloadLessonsIds = lessons
+      .filter((lesson) => lesson.id)
+      .map((lesson) => lesson.id);
+
+    return currentLessons.filter(
+      (lesson) => !payloadLessonsIds.includes(lesson.id)
+    );
   }
 }

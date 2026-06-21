@@ -51,6 +51,12 @@ const existingModuleInputMock = {
   lessons: [],
 };
 
+const createdModuleMock = {
+  ...moduleDataMock,
+  id: 'react-module-id',
+  title: 'React',
+};
+
 const unpublishedLessonMock = {
   ...lessonDataMock,
   isPublished: false,
@@ -316,6 +322,57 @@ describe('UpdateCourseStructureUseCase', () => {
     });
   });
 
+  it('should create lessons when creating a new module', async () => {
+    const {
+      sut,
+      userRepositoryStub,
+      courseRepositoryStub,
+      moduleRepositoryStub,
+      lessonRepositoryStub,
+    } = makeSut();
+
+    vitest
+      .spyOn(userRepositoryStub, 'findById')
+      .mockResolvedValueOnce(authorUserMock);
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
+
+    vitest
+      .spyOn(moduleRepositoryStub, 'create')
+      .mockResolvedValueOnce(createdModuleMock);
+
+    const createSpy = vitest.spyOn(lessonRepositoryStub, 'create');
+
+    await sut.execute({
+      courseId: courseMock.id,
+      userId: authorUserMock.id,
+      modules: [
+        existingModuleInputMock,
+        {
+          title: 'React',
+          order: 1,
+          lessons: [
+            {
+              title: 'UseHook',
+              content: 'Conjunto de função reutilizavél em React',
+              order: 0,
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(createSpy).toHaveBeenCalledWith({
+      courseId: courseMock.id,
+      moduleId: createdModuleMock.id,
+      title: 'UseHook',
+      content: 'Conjunto de função reutilizavél em React',
+      order: 0,
+    });
+  });
+
   it('should update existing module', async () => {
     const {
       sut,
@@ -334,7 +391,7 @@ describe('UpdateCourseStructureUseCase', () => {
 
     const updateSpy = vitest.spyOn(moduleRepositoryStub, 'update');
 
-    const updatingModule = {
+    const updatedModule = {
       ...existingModuleInputMock,
       order: 2,
     };
@@ -342,12 +399,131 @@ describe('UpdateCourseStructureUseCase', () => {
     await sut.execute({
       courseId: courseMock.id,
       userId: authorUserMock.id,
-      modules: [updatingModule],
+      modules: [updatedModule],
     });
 
-    expect(updateSpy).toHaveBeenCalledWith(updatingModule.id, {
-      title: updatingModule.title,
+    expect(updateSpy).toHaveBeenCalledWith(updatedModule.id, {
+      title: updatedModule.title,
       order: 2,
     });
+  });
+
+  it('should create new lesson', async () => {
+    const {
+      sut,
+      userRepositoryStub,
+      courseRepositoryStub,
+      lessonRepositoryStub,
+    } = makeSut();
+
+    vitest
+      .spyOn(userRepositoryStub, 'findById')
+      .mockResolvedValueOnce(authorUserMock);
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
+
+    const createSpy = vitest.spyOn(lessonRepositoryStub, 'create');
+
+    await sut.execute({
+      courseId: courseMock.id,
+      userId: authorUserMock.id,
+      modules: [
+        {
+          ...moduleDataMock,
+          lessons: [
+            {
+              title: 'UseHook',
+              content: 'Conjunto de função reutilizavél em React',
+              order: 0,
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(createSpy).toHaveBeenCalledWith({
+      courseId: courseMock.id,
+      moduleId: moduleDataMock.id,
+      title: 'UseHook',
+      content: 'Conjunto de função reutilizavél em React',
+      order: 0,
+    });
+  });
+
+  it('should update existing lesson', async () => {
+    const {
+      sut,
+      userRepositoryStub,
+      courseRepositoryStub,
+      lessonRepositoryStub,
+    } = makeSut();
+
+    vitest
+      .spyOn(userRepositoryStub, 'findById')
+      .mockResolvedValueOnce(authorUserMock);
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
+
+    const updateSpy = vitest.spyOn(lessonRepositoryStub, 'update');
+
+    await sut.execute({
+      courseId: courseMock.id,
+      userId: authorUserMock.id,
+      modules: [
+        {
+          ...moduleDataMock,
+          lessons: [
+            {
+              id: '1234',
+              title: 'UseHook',
+              content: 'Conjunto de função reutilizavél em React',
+              order: 0,
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(updateSpy).toHaveBeenCalledWith('1234', {
+      title: 'UseHook',
+      content: 'Conjunto de função reutilizavél em React',
+      order: 0,
+    });
+  });
+
+  it('should delete removed lessons', async () => {
+    const {
+      sut,
+      userRepositoryStub,
+      courseRepositoryStub,
+      lessonRepositoryStub,
+    } = makeSut();
+
+    vitest
+      .spyOn(userRepositoryStub, 'findById')
+      .mockResolvedValueOnce(authorUserMock);
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
+
+    const deleteSpy = vitest.spyOn(lessonRepositoryStub, 'delete');
+
+    await sut.execute({
+      courseId: courseMock.id,
+      userId: authorUserMock.id,
+      modules: [
+        {
+          ...moduleDataMock,
+          lessons: [],
+        },
+      ],
+    });
+
+    expect(deleteSpy).toHaveBeenCalledWith(lessonDataMock.id);
   });
 });
