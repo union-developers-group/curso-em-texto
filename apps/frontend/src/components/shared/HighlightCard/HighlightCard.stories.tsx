@@ -5,7 +5,7 @@ import { highlightCardMock, highlightCardMocks } from './HighlightCard.mock';
 import { HighlightCard } from '.';
 
 const meta = {
-  title: 'Shared/HighlightCard',
+  title: 'Components/Shared/HighlightCard',
   component: HighlightCard,
   args: { ...highlightCardMock, size: 'md' },
 } satisfies Meta<typeof HighlightCard>;
