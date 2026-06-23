@@ -8,7 +8,9 @@ describe('<HighlightCard />', () => {
   it('should render the title', () => {
     render(<HighlightCard {...highlightCardMock} />);
 
-    const title = screen.getByTestId('highlight-card-title');
+    const title = screen.getByRole('heading', {
+      name: highlightCardMock.title,
+    });
 
     expect(title).toHaveTextContent(highlightCardMock.title);
   });
@@ -16,7 +18,7 @@ describe('<HighlightCard />', () => {
   it('should render the description', () => {
     render(<HighlightCard {...highlightCardMock} />);
 
-    const description = screen.getByTestId('highlight-card-description');
+    const description = screen.getByText(highlightCardMock.description);
 
     expect(description).toHaveTextContent(highlightCardMock.description);
   });
@@ -32,7 +34,7 @@ describe('<HighlightCard />', () => {
   it('should render with md size by default', () => {
     render(<HighlightCard {...highlightCardMock} />);
 
-    const card = screen.getByTestId('highlight-card');
+    const card = screen.getByRole('article');
 
     expect(card).toHaveClass('max-w-[21.3125rem]');
   });
@@ -40,7 +42,7 @@ describe('<HighlightCard />', () => {
   it('should render with lg size', () => {
     render(<HighlightCard size="lg" {...highlightCardMock} />);
 
-    const card = screen.getByTestId('highlight-card');
+    const card = screen.getByRole('article');
 
     expect(card).toHaveClass('max-w-[27.5rem]');
   });
@@ -48,7 +50,7 @@ describe('<HighlightCard />', () => {
   it('should render with custom class', () => {
     render(<HighlightCard className="custom-class" {...highlightCardMock} />);
 
-    const card = screen.getByTestId('highlight-card');
+    const card = screen.getByRole('article');
 
     expect(card).toHaveClass('custom-class');
   });

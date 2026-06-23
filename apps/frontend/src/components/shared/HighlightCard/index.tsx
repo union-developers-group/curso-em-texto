@@ -56,7 +56,7 @@ export const HighlightCard = ({
       </svg>
 
       <div
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-background-200 bg-background-300"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-background-200 bg-background-300"
         data-testid="highlight-card-icon"
       >
         <Icon
