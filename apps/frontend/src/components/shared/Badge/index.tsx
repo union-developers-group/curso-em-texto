@@ -29,10 +29,7 @@ export interface BadgeProps extends BadgeVariants {
 
 export const Badge = ({ label, variant, className }: BadgeProps) => {
   return (
-    <span
-      className={cn(badgeVariants({ variant, className }))}
-      data-testid="badge"
-    >
+    <span className={cn(badgeVariants({ variant, className }))}>
       {label}
     </span>
   );
