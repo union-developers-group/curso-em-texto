@@ -6,9 +6,9 @@ import type {
 } from '@/data/repositories/interfaces/LessonRepository';
 
 export const lessonDataMock: LessonModelData = {
-  id: '1234',
-  courseId: '1234',
-  moduleId: '1234',
+  id: crypto.randomUUID(),
+  courseId: crypto.randomUUID(),
+  moduleId: crypto.randomUUID(),
   title: 'Lição 1 - Começando em Programação Assíncrona',
   content:
     'A programação assíncrona é uma técnica que permite iniciar uma tarefa e realizar outras operações imediatamente, em paralelo com a primeira tarefa.',
@@ -21,9 +21,9 @@ export const lessonDataMock: LessonModelData = {
 export const lessonManyDataMock: LessonModelData[] = [
   { ...lessonDataMock },
   {
-    id: '5678',
-    courseId: '1234',
-    moduleId: '5678',
+    id: crypto.randomUUID(),
+    courseId: crypto.randomUUID(),
+    moduleId: crypto.randomUUID(),
     title: 'Lição 1 - Começando em Node.js',
     content:
       'O Node.js é um ambiente de execução de código aberto que permite aos desenvolvedores executar código JavaScript fora de um navegador.',

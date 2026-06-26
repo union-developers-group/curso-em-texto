@@ -8,7 +8,7 @@ export interface CreateModuleData {
 }
 
 export interface ModuleRepository {
-  create(data: CreateModuleData): Promise<ModuleModelData>;
+  create(data: CreateModuleData): Promise<ModuleModelData | null>;
   findById(id: string): Promise<ModuleModelData | null>;
   findByCourseId(courseId: string): Promise<ModuleModelData[]>;
   update(id: string, data: Partial<ModuleModelData>): Promise<ModuleModelData>;

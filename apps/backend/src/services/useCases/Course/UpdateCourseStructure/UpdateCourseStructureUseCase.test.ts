@@ -36,6 +36,7 @@ const otherUserMock = {
 
 const courseMock = {
   ...courseDataMock,
+  id: '1234',
   authorId: authorUserMock.id,
 };
 
@@ -44,8 +45,10 @@ const archivedCourseMock = {
   status: 'archived',
 };
 
+const moduleId = crypto.randomUUID();
+
 const existingModuleInputMock = {
-  id: moduleDataMock.id,
+  id: moduleId,
   title: moduleDataMock.title,
   order: moduleDataMock.order,
   lessons: [],
@@ -55,11 +58,6 @@ const createdModuleMock = {
   ...moduleDataMock,
   id: 'react-module-id',
   title: 'React',
-};
-
-const unpublishedLessonMock = {
-  ...lessonDataMock,
-  isPublished: false,
 };
 
 const makeSut = () => {
@@ -225,29 +223,6 @@ describe('UpdateCourseStructureUseCase', () => {
     });
   });
 
-  it('should return error if trying to remove module with published lessons', async () => {
-    const { sut, userRepositoryStub, courseRepositoryStub } = makeSut();
-
-    vitest
-      .spyOn(userRepositoryStub, 'findById')
-      .mockResolvedValueOnce(authorUserMock);
-
-    vitest
-      .spyOn(courseRepositoryStub, 'findById')
-      .mockResolvedValueOnce(courseMock);
-
-    const response = await sut.execute({
-      courseId: courseMock.id,
-      userId: authorUserMock.id,
-      modules: [],
-    });
-
-    expect(response).toStrictEqual({
-      data: null,
-      error: 'Cannot remove module with published lessons.',
-    });
-  });
-
   it('should delete removed modules', async () => {
     const {
       sut,
@@ -265,9 +240,21 @@ describe('UpdateCourseStructureUseCase', () => {
       .spyOn(courseRepositoryStub, 'findById')
       .mockResolvedValueOnce(courseMock);
 
-    vitest
-      .spyOn(lessonRepositoryStub, 'findByModuleId')
-      .mockResolvedValueOnce([unpublishedLessonMock]);
+    vitest.spyOn(moduleRepositoryStub, 'findByCourseId').mockResolvedValueOnce([
+      {
+        ...moduleDataMock,
+        id: moduleId,
+        courseId: courseMock.id,
+      },
+    ]);
+
+    vitest.spyOn(lessonRepositoryStub, 'findByModuleId').mockResolvedValueOnce([
+      {
+        ...lessonDataMock,
+        moduleId,
+        isPublished: false,
+      },
+    ]);
 
     const deleteSpy = vitest.spyOn(moduleRepositoryStub, 'delete');
 
@@ -277,7 +264,7 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [],
     });
 
-    expect(deleteSpy).toHaveBeenCalledWith(moduleDataMock.id);
+    expect(deleteSpy).toHaveBeenCalledWith(moduleId);
   });
 
   it('should create new module', async () => {
@@ -428,6 +415,7 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [
         {
           ...moduleDataMock,
+          id: moduleId,
           lessons: [
             {
               title: 'UseHook',
@@ -441,7 +429,7 @@ describe('UpdateCourseStructureUseCase', () => {
 
     expect(createSpy).toHaveBeenCalledWith({
       courseId: courseMock.id,
-      moduleId: moduleDataMock.id,
+      moduleId: moduleId,
       title: 'UseHook',
       content: 'Conjunto de função reutilizavél em React',
       order: 0,
@@ -472,6 +460,7 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [
         {
           ...moduleDataMock,
+          id: moduleId,
           lessons: [
             {
               id: '1234',
@@ -507,6 +496,13 @@ describe('UpdateCourseStructureUseCase', () => {
       .spyOn(courseRepositoryStub, 'findById')
       .mockResolvedValueOnce(courseMock);
 
+    vitest.spyOn(lessonRepositoryStub, 'findByModuleId').mockResolvedValueOnce([
+      {
+        ...lessonDataMock,
+        moduleId,
+      },
+    ]);
+
     const deleteSpy = vitest.spyOn(lessonRepositoryStub, 'delete');
 
     await sut.execute({
@@ -515,6 +511,7 @@ describe('UpdateCourseStructureUseCase', () => {
       modules: [
         {
           ...moduleDataMock,
+          id: moduleId,
           lessons: [],
         },
       ],
@@ -524,7 +521,13 @@ describe('UpdateCourseStructureUseCase', () => {
   });
 
   it('should return updated course structure', async () => {
-    const { sut, userRepositoryStub, courseRepositoryStub } = makeSut();
+    const {
+      sut,
+      userRepositoryStub,
+      courseRepositoryStub,
+      moduleRepositoryStub,
+      lessonRepositoryStub,
+    } = makeSut();
 
     vitest
       .spyOn(userRepositoryStub, 'findById')
@@ -533,6 +536,21 @@ describe('UpdateCourseStructureUseCase', () => {
     vitest
       .spyOn(courseRepositoryStub, 'findById')
       .mockResolvedValueOnce(courseMock);
+
+    vitest.spyOn(moduleRepositoryStub, 'findByCourseId').mockResolvedValue([
+      {
+        ...moduleDataMock,
+        id: moduleId,
+        courseId: courseMock.id,
+      },
+    ]);
+
+    vitest.spyOn(lessonRepositoryStub, 'findByModuleId').mockResolvedValue([
+      {
+        ...lessonDataMock,
+        moduleId,
+      },
+    ]);
 
     const response = await sut.execute({
       courseId: courseMock.id,
@@ -545,7 +563,7 @@ describe('UpdateCourseStructureUseCase', () => {
       courseId: courseMock.id,
       modules: [
         {
-          id: moduleDataMock.id,
+          id: moduleId,
           title: moduleDataMock.title,
           order: moduleDataMock.order,
           lessons: [

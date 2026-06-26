@@ -41,8 +41,9 @@ export class UserRepositoryImp implements UserRepository {
     const [result] = await db
       .select()
       .from(usersTable)
-      .where(eq(usersTable.id, id));
+      .where(eq(usersTable.id, id))
+      .limit(1);
 
-    return result || null;
+    return result ?? null;
   }
 }

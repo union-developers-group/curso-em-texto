@@ -137,6 +137,13 @@ export class UpdateCourseStructureUseCase
         order: module.order,
       });
 
+      if (!createdModule) {
+        return {
+          data: null,
+          error: 'Failed to create module.',
+        };
+      }
+
       for (const lesson of module.lessons) {
         await this.lessonRepository.create({
           courseId: data.courseId,

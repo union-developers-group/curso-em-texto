@@ -5,8 +5,8 @@ import type {
 } from '@/data/repositories/interfaces/ModuleRepository';
 
 export const moduleDataMock: ModuleModelData = {
-  id: '1234',
-  courseId: '1234',
+  id: crypto.randomUUID(),
+  courseId: crypto.randomUUID(),
   title: 'Programação Assíncrona',
   order: 0,
   isPublished: true,
@@ -17,8 +17,8 @@ export const moduleDataMock: ModuleModelData = {
 export const moduleManyDataMock: ModuleModelData[] = [
   { ...moduleDataMock },
   {
-    id: '1234',
-    courseId: '5678',
+    id: crypto.randomUUID(),
+    courseId: crypto.randomUUID(),
     title: 'Node.js',
     order: 0,
     isPublished: true,
