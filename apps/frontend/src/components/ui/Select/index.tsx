@@ -1,6 +1,13 @@
 'use client';
 
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -54,6 +61,8 @@ export const Select = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!open) return;
+
     const handleClickOutside = (event: PointerEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) {
         setOpen(false);
@@ -63,12 +72,50 @@ export const Select = ({
     document.addEventListener('pointerdown', handleClickOutside);
     return () =>
       document.removeEventListener('pointerdown', handleClickOutside);
-  }, []);
+  }, [open]);
 
   const handleSelect = (option: SelectOption) => {
     if (!isControlled) setInternalValue(option.value);
     onChange?.(option.value);
     setOpen(false);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (disabled) return;
+
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        setOpen((prev) => !prev);
+        break;
+      case 'ArrowDown':
+      case 'ArrowUp': {
+        event.preventDefault();
+        if (!open) {
+          setOpen(true);
+          break;
+        }
+        const currentIndex = options.findIndex(
+          (o) => o.value === selectedValue
+        );
+        const lastIndex = options.length - 1;
+        const nextIndex =
+          event.key === 'ArrowDown'
+            ? currentIndex < lastIndex
+              ? currentIndex + 1
+              : 0
+            : currentIndex > 0
+              ? currentIndex - 1
+              : lastIndex;
+        handleSelect(options[nextIndex]);
+        break;
+      }
+      case 'Escape':
+      case 'Tab':
+        setOpen(false);
+        break;
+    }
   };
 
   return (
@@ -99,6 +146,7 @@ export const Select = ({
         aria-describedby={helperText ? messageId : undefined}
         disabled={disabled}
         onClick={() => setOpen((prev) => !prev)}
+        onKeyDown={handleKeyDown}
         className={cn(
           'flex w-full items-center justify-between gap-2 rounded-xl border bg-background-300 px-6 py-4 text-left text-xl text-gray-50 outline-none transition-colors disabled:cursor-not-allowed disabled:border-transparent disabled:bg-background-200 disabled:text-gray-200',
           error
@@ -123,6 +171,7 @@ export const Select = ({
         <ul
           id={listboxId}
           role="listbox"
+          aria-labelledby={selectId}
           className="absolute top-full left-0 z-10 mt-2 max-h-72 w-full overflow-auto rounded-2xl bg-background-200 p-2 shadow-lg"
         >
           {options.map((option) => (

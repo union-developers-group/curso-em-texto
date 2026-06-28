@@ -68,4 +68,20 @@ describe('<Select />', () => {
 
     expect(screen.getByLabelText('Curso')).toBeDisabled();
   });
+
+  it('should navigate and select options using the keyboard', () => {
+    const handleChange = vi.fn();
+    renderSelect({ onChange: handleChange });
+
+    const trigger = screen.getByLabelText('Curso');
+
+    fireEvent.keyDown(trigger, { key: ' ' });
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    fireEvent.keyDown(trigger, { key: 'ArrowDown' });
+    expect(handleChange).toHaveBeenCalledWith('1');
+
+    fireEvent.keyDown(trigger, { key: 'Escape' });
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
 });
