@@ -36,4 +36,14 @@ export class UserRepositoryImp implements UserRepository {
 
     return result;
   }
+
+  async findById(id: string): Promise<UserModelData | null> {
+    const [result] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id))
+      .limit(1);
+
+    return result ?? null;
+  }
 }
