@@ -51,9 +51,9 @@ export const CourseCard = ({
       </div>
 
       <div className="flex flex-wrap gap-2" aria-label="Categorias do curso">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <Badge
-            key={category}
+            key={category + '-' + index}
             label={category}
             className="rounded-full bg-background-300 px-3 py-1 text-xs text-gray-50"
           />
