@@ -6,4 +6,5 @@ export const apiRoutes: FastifyPluginAsync = async (app) => {
   app.register(routes.exampleRoutes);
   app.register(routes.authRoutes);
   app.register(routes.generateTokenRoutes);
+  app.register(routes.courseRoutes);
 };
