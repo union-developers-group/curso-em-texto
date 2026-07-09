@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutFeaturedLabel: Story = {
-  args: { ...courseCardMocks[1] },
+  args: { ...courseCardMocks[1], featuredLabel: undefined },
 };
 
 export const EmptyProgress: Story = {
