@@ -1,19 +1,23 @@
 import { cn } from '@/utils/cn';
-import { KeyboardEvent, useRef } from 'react';
+import {
+  KeyboardEvent,
+  ComponentPropsWithoutRef,
+  useRef,
+  useState,
+} from 'react';
 
 export interface TabItem {
   value: string;
   label: string;
 }
 
-export interface TabsProps {
+export interface TabsProps extends ComponentPropsWithoutRef<'div'> {
   tabs: TabItem[];
-  value: string;
-  onChange: (value: string) => void;
-  className?: string;
 }
 
-export const Tabs = ({ tabs, value, onChange, className }: TabsProps) => {
+export const Tabs = ({ tabs, className, ...props }: TabsProps) => {
+  const [activeTab, setActiveTab] = useState(tabs[0]?.value);
+
   const handleKeyDown = (
     event: KeyboardEvent<HTMLButtonElement>,
     currentIndex: number
@@ -42,7 +46,7 @@ export const Tabs = ({ tabs, value, onChange, className }: TabsProps) => {
     }
 
     event.preventDefault();
-    onChange(tabs[nextIndex].value);
+    setActiveTab(tabs[nextIndex].value);
 
     tabsRef.current[nextIndex]?.focus();
   };
@@ -50,11 +54,12 @@ export const Tabs = ({ tabs, value, onChange, className }: TabsProps) => {
   const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
   return (
     <div
+      {...props}
       role="tablist"
       className={cn('inline-flex rounded-xl bg-background-400 p-1', className)}
     >
       {tabs.map((tab, index) => {
-        const isActive = value === tab.value;
+        const isActive = activeTab === tab.value;
 
         return (
           <button
@@ -62,14 +67,14 @@ export const Tabs = ({ tabs, value, onChange, className }: TabsProps) => {
             type="button"
             role="tab"
             aria-selected={isActive}
-            onClick={() => onChange(tab.value)}
+            onClick={() => setActiveTab(tab.value)}
             tabIndex={isActive ? 0 : -1}
             onKeyDown={(event) => handleKeyDown(event, index)}
             ref={(element) => {
               tabsRef.current[index] = element;
             }}
             className={cn(
-              'relative rounded-lg bg-background-400 px-6 py-3 text-sm font-medium transition-all outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0',
+              'relative rounded-lg bg-background-400 px-6 py-3 text-sm font-medium transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary',
               isActive ? 'text-gray-50' : 'text-gray-200 hover:text-gray-50'
             )}
           >

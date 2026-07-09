@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { useState } from 'react';
 import { Tabs } from '@/components/ui/Tabs';
 
 const tabs = [
@@ -29,8 +28,6 @@ const meta = {
   ],
   args: {
     tabs,
-    value: 'details',
-    onChange: () => {},
   },
 } satisfies Meta<typeof Tabs>;
 
@@ -38,10 +35,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [value, setValue] = useState('details');
-
-    return <Tabs tabs={tabs} value={value} onChange={setValue} />;
-  },
-};
+export const Default: Story = {};
