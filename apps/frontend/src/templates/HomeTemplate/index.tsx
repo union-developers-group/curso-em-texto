@@ -1,6 +1,6 @@
 'use client';
 
-import { homeTemplateMock } from '@/templates/HomeTemplate/HomeTemplate.mock';
+import { courseCardMocks } from '@/components/shared/CourseCard/CourseCard.mock';
 import { CourseCard } from '@/components/shared/CourseCard';
 import { buttonVariants } from '@/components/ui/Button';
 import { Fragment, useSyncExternalStore } from 'react';
@@ -18,7 +18,7 @@ const subscribeAuthChange = (callback: () => void) => {
 
 export const HomeTemplate = () => {
   const { isAuthenticated } = useAuth();
-  const courses = homeTemplateMock.slice(0, 3);
+  const courses = courseCardMocks.slice(0, 3);
 
   const isLoggedIn = useSyncExternalStore(
     subscribeAuthChange,
