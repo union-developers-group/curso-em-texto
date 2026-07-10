@@ -65,6 +65,48 @@ export const courseRoutes: FastifyPluginAsync = async (app) => {
           200: {
             description: 'Course structure updated successfully',
             type: 'object',
+            properties: {
+              courseId: {
+                type: 'string',
+              },
+              modules: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                    },
+                    title: {
+                      type: 'string',
+                    },
+                    order: {
+                      type: 'number',
+                    },
+                    lessons: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          id: {
+                            type: 'string',
+                          },
+                          title: {
+                            type: 'string',
+                          },
+                          content: {
+                            type: 'string',
+                          },
+                          order: {
+                            type: 'number',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
           400: {
             description: 'Bad request',

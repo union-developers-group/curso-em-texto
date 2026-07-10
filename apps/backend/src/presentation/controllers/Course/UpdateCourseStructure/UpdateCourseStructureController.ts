@@ -34,8 +34,8 @@ export class UpdateCourseStructureController implements Controller {
   async handle(input: unknown) {
     if (!input || typeof input !== 'object') {
       return {
-        statusCode: 401,
-        body: new Error('Unauthorized'),
+        statusCode: 400,
+        body: new Error('Invalid request body'),
       };
     }
 

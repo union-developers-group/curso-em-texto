@@ -91,14 +91,14 @@ const setupUpdateCourseStructureControllerTest = () => {
 
 describe('UpdateCourseStructureController', () => {
   it.each([undefined, null, 'invalid-input'])(
-    'should return status code 401 if input is not a valid object',
+    'should return status code 400 if input is not a valid object',
     async (input) => {
       const { sut } = setupUpdateCourseStructureControllerTest();
 
       const response = await sut.handle(input);
 
-      expect(response.statusCode).toBe(401);
-      expect(response.body).toStrictEqual(new Error('Unauthorized'));
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toStrictEqual(new Error('Invalid request body'));
     }
   );
 
