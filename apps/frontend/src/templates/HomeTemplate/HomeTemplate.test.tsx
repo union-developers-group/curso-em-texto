@@ -69,7 +69,7 @@ describe('<HomeTemplate />', () => {
     expect(
       screen.getByRole('link', { name: 'Ver todos os cursos' })
     ).toHaveAttribute('href', '/cursos');
-    expect(screen.getAllByTestId('course-card')).toHaveLength(3);
+    expect(screen.getAllByRole('article')).toHaveLength(3);
   });
 
   it('should render the Footer component', () => {

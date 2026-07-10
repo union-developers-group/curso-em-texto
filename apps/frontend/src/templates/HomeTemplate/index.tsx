@@ -11,16 +11,18 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import Link from 'next/link';
 
+const subscribeAuthChange = (callback: () => void) => {
+  window.addEventListener('auth-change', callback);
+  return () => window.removeEventListener('auth-change', callback);
+};
+
 export const HomeTemplate = () => {
   const { isAuthenticated } = useAuth();
   const courses = homeTemplateMock.slice(0, 3);
 
   const isLoggedIn = useSyncExternalStore(
-    (callback) => {
-      window.addEventListener('auth-change', callback);
-      return () => window.removeEventListener('auth-change', callback);
-    },
-    () => isAuthenticated(),
+    subscribeAuthChange,
+    isAuthenticated,
     () => false
   );
 
