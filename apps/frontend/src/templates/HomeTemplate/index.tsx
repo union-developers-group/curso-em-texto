@@ -1,6 +1,6 @@
 'use client';
 
-import { courseCardMocks } from '@/components/shared/CourseCard/CourseCard.mock';
+import type { CourseCardProps } from '@/components/shared/CourseCard';
 import { CourseCard } from '@/components/shared/CourseCard';
 import { buttonVariants } from '@/components/ui/Button';
 import { Fragment, useSyncExternalStore } from 'react';
@@ -16,9 +16,12 @@ const subscribeAuthChange = (callback: () => void) => {
   return () => window.removeEventListener('auth-change', callback);
 };
 
-export const HomeTemplate = () => {
+interface HomeTemplateProps {
+  courses: Omit<CourseCardProps, 'className'>[];
+}
+
+export const HomeTemplate = ({ courses }: HomeTemplateProps) => {
   const { isAuthenticated } = useAuth();
-  const courses = courseCardMocks.slice(0, 3);
 
   const isLoggedIn = useSyncExternalStore(
     subscribeAuthChange,

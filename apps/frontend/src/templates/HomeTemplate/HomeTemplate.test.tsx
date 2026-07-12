@@ -1,3 +1,4 @@
+import { courseCardMocks } from '@/components/shared/CourseCard/CourseCard.mock';
 import { render, screen } from '@testing-library/react';
 import { HomeTemplate } from '@/templates/HomeTemplate';
 import { useAuth } from '@/contexts/AuthContext';
@@ -25,19 +26,22 @@ const mockAuth = (isAuthenticated: boolean) => {
   });
 };
 
+const renderHomeTemplate = () =>
+  render(<HomeTemplate courses={courseCardMocks} />);
+
 describe('<HomeTemplate />', () => {
   beforeEach(() => {
     mockAuth(false);
   });
 
   it('should render the Hero component', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(screen.getByRole('region', { name: 'Hero' })).toBeInTheDocument();
   });
 
   it('should render the CTA section', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.getByRole('heading', {
@@ -47,7 +51,7 @@ describe('<HomeTemplate />', () => {
   });
 
   it('should not render the learning journey section when user is not authenticated', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.queryByRole('heading', {
@@ -59,7 +63,7 @@ describe('<HomeTemplate />', () => {
   it('should render the learning journey section when user is authenticated', () => {
     mockAuth(true);
 
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.getByRole('heading', {
@@ -73,7 +77,7 @@ describe('<HomeTemplate />', () => {
   });
 
   it('should render the Footer component', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.getByRole('contentinfo', { name: 'Footer' })
