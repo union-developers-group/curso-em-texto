@@ -228,7 +228,7 @@ Você pode visualizar o layout do projeto, [clicando aqui](https://www.figma.com
 
 ### Em desenvolvimento
 
-- [ ] [Sistema de autenticação](https://github.com/d3vlopes/curso-em-texto/milestone/1)
+- [x] [Sistema de autenticação](https://github.com/d3vlopes/curso-em-texto/milestone/1)
   - Cadastro e login de usuários.
   - Integração com OAuth (Google e GitHub).
   - Rules.
