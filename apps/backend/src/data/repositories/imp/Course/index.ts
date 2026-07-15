@@ -44,4 +44,17 @@ export class CourseRepositoryImp implements CourseRepository {
 
     return result[0] ?? null;
   }
+
+  async update(
+    id: string,
+    data: Partial<CourseModelData>
+  ): Promise<CourseModelData> {
+    const [result] = await db
+      .update(coursesTable)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(coursesTable.id, id))
+      .returning();
+
+    return result;
+  }
 }

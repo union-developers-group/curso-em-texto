@@ -23,4 +23,5 @@ export interface CourseRepository {
   findAuthorById(authorId: string): Promise<UserModelData | null>;
   findBySlug(slug: string): Promise<CourseModelData | null>;
   findById(id: string): Promise<CourseModelData | null>;
+  update(id: string, data: Partial<CourseModelData>): Promise<CourseModelData>;
 }
