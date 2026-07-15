@@ -82,6 +82,13 @@ class CourseRepositoryStub implements CourseRepository {
   async findById(id: string): Promise<CourseModelData | null> {
     return id === createdCourseMock.id ? createdCourseMock : null;
   }
+
+  async update(
+    _: string,
+    __: Partial<CourseModelData>
+  ): Promise<CourseModelData> {
+    return createdCourseMock;
+  }
 }
 
 const makeSut = () => {
