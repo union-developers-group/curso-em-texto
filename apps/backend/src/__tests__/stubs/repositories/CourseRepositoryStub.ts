@@ -84,8 +84,11 @@ export class CourseRepositoryStub implements CourseRepository {
 
   async update(
     _: string,
-    __: Partial<CourseModelData>
+    data: Partial<CourseModelData>
   ): Promise<CourseModelData> {
-    return Promise.resolve(courseDataMock);
+    return {
+      ...courseDataMock,
+      ...data,
+    };
   }
 }
