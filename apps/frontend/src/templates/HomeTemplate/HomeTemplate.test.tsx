@@ -50,6 +50,20 @@ describe('<HomeTemplate />', () => {
     ).toBeInTheDocument();
   });
 
+  it('should render the featured courses section when user is not authenticated', () => {
+    renderHomeTemplate();
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Cursos em Destaque',
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Ver todos os cursos' })
+    ).toHaveAttribute('href', '/cursos');
+    expect(screen.getAllByRole('article')).toHaveLength(3);
+  });
+
   it('should not render the learning journey section when user is not authenticated', () => {
     renderHomeTemplate();
 
@@ -71,9 +85,9 @@ describe('<HomeTemplate />', () => {
       })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: 'Ver todos os cursos' })
-    ).toHaveAttribute('href', '/cursos');
-    expect(screen.getAllByRole('article')).toHaveLength(3);
+      screen.getAllByRole('link', { name: 'Ver todos os cursos' })
+    ).toHaveLength(2);
+    expect(screen.getAllByRole('article')).toHaveLength(6);
   });
 
   it('should render the Footer component', () => {
