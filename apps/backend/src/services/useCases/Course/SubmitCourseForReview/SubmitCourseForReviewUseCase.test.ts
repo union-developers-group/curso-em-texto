@@ -51,7 +51,7 @@ describe('SubmitCourseForReviewUseCase', () => {
     const { sut } = makeSut();
 
     const response = await sut.execute({
-      courseId: 'invalid-id',
+      courseId: crypto.randomUUID(),
       userId: authorUserMock.id,
     });
 
@@ -66,7 +66,7 @@ describe('SubmitCourseForReviewUseCase', () => {
 
     const response = await sut.execute({
       courseId: courseMock.id,
-      userId: 'invalid-id',
+      userId: crypto.randomUUID(),
     });
 
     expect(response).toStrictEqual({
