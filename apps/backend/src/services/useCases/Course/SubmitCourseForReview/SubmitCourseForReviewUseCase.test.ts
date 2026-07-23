@@ -26,7 +26,7 @@ const otherUserMock = {
 
 const courseMock = {
   ...courseDataMock,
-  id: '1234',
+  id: crypto.randomUUID(),
   authorId: authorUserMock.id,
 };
 
@@ -62,7 +62,11 @@ describe('SubmitCourseForReviewUseCase', () => {
   });
 
   it('should return error if user does not exist', async () => {
-    const { sut } = makeSut();
+    const { sut, courseRepositoryStub } = makeSut();
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
 
     const response = await sut.execute({
       courseId: courseMock.id,
@@ -76,7 +80,11 @@ describe('SubmitCourseForReviewUseCase', () => {
   });
 
   it('should return error if user is not the course author or admin', async () => {
-    const { sut, userRepositoryStub } = makeSut();
+    const { sut, userRepositoryStub, courseRepositoryStub } = makeSut();
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
 
     vitest
       .spyOn(userRepositoryStub, 'findById')
@@ -94,7 +102,11 @@ describe('SubmitCourseForReviewUseCase', () => {
   });
 
   it('should submit course for review if user is admin', async () => {
-    const { sut, userRepositoryStub } = makeSut();
+    const { sut, userRepositoryStub, courseRepositoryStub } = makeSut();
+
+    vitest
+      .spyOn(courseRepositoryStub, 'findById')
+      .mockResolvedValueOnce(courseMock);
 
     vitest
       .spyOn(userRepositoryStub, 'findById')
