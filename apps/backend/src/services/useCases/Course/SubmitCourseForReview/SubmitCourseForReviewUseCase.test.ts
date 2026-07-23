@@ -151,17 +151,22 @@ describe('SubmitCourseForReviewUseCase', () => {
       .spyOn(courseRepositoryStub, 'findById')
       .mockResolvedValueOnce(courseMock);
 
+    const updatedCourse = {
+      ...courseMock,
+      status: 'revision',
+    };
+
+    vitest
+      .spyOn(courseRepositoryStub, 'update')
+      .mockResolvedValueOnce(updatedCourse);
+
     const response = await sut.execute({
       courseId: courseMock.id,
       userId: authorUserMock.id,
     });
 
     expect(response).toStrictEqual({
-      data: {
-        courseId: courseMock.id,
-        userId: authorUserMock.id,
-        status: 'revision',
-      },
+      data: updatedCourse,
       error: null,
     });
   });

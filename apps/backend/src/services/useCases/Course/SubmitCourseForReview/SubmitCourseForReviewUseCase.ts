@@ -11,14 +11,8 @@ export type SubmitCourseForReviewInputType = {
   userId: string;
 };
 
-export type SubmittedCourseResponse = {
-  courseId: string;
-  userId: string;
-  status: string;
-};
-
 export class SubmitCourseForReviewUseCase
-  implements UseCase<SubmitCourseForReviewInputType, SubmittedCourseResponse>
+  implements UseCase<SubmitCourseForReviewInputType, CourseModelData>
 {
   constructor(
     private readonly courseRepository: CourseRepository,
@@ -27,7 +21,7 @@ export class SubmitCourseForReviewUseCase
 
   async execute(
     data: SubmitCourseForReviewInputType
-  ): Promise<UseCaseResponse<SubmittedCourseResponse>> {
+  ): Promise<UseCaseResponse<CourseModelData>> {
     const course = await this.courseRepository.findById(data.courseId);
 
     if (!course) {
@@ -59,12 +53,15 @@ export class SubmitCourseForReviewUseCase
       status: 'revision',
     });
 
+    if (!updatedCourse) {
+      return {
+        data: null,
+        error: 'Failed to update course status.',
+      };
+    }
+
     return {
-      data: {
-        courseId: updatedCourse.id,
-        userId: user.id,
-        status: updatedCourse.status,
-      },
+      data: updatedCourse,
       error: null,
     };
   }
