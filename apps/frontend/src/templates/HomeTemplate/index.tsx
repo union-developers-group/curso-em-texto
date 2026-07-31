@@ -33,6 +33,7 @@ export const HomeTemplate = ({ courses }: HomeTemplateProps) => {
     <Fragment>
       <main className="flex-1">
         <Hero />
+
         {isLoggedIn && (
           <section
             aria-labelledby="learning-journey-title"
@@ -67,6 +68,40 @@ export const HomeTemplate = ({ courses }: HomeTemplateProps) => {
             </div>
           </section>
         )}
+
+        <section
+          aria-labelledby="featured-courses-title"
+          className="w-full bg-background-500 px-6 py-16 sm:px-8 md:px-12 lg:px-20 lg:py-24"
+        >
+          <div className="mx-auto flex w-full max-w-286 flex-col gap-10">
+            <div className="flex items-center justify-between gap-6">
+              <h2
+                id="featured-courses-title"
+                className="text-2xl leading-8 font-medium tracking-normal text-gray-50"
+              >
+                Cursos em Destaque
+              </h2>
+
+              <Link
+                href="/cursos"
+                className="shrink-0 text-sm font-medium text-gray-50 transition-colors hover:text-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gray-50"
+              >
+                Ver todos os cursos
+              </Link>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+              {courses.map((course, index) => (
+                <CourseCard
+                  key={`${course.title}-${index}`}
+                  {...course}
+                  className="max-w-none"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section
           aria-labelledby="cta-title"
           className="flex w-full items-center justify-center bg-gradient-primary px-6 py-20 text-center sm:px-8 md:px-12 lg:px-20"
