@@ -64,6 +64,13 @@
       "when": 1781130293809,
       "tag": "0008_brief_kitty_pryde",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1784910927373,
+      "tag": "0009_wise_siren",
+      "breakpoints": true
     }
   ]
 }
