@@ -44,4 +44,4 @@ jobs:
         run: npx turbo run test:ci --affected --parallel
 
       - name: Packages audit
-        run: npm audit --audit-level=high
+        run: npx audit-ci

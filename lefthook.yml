@@ -5,7 +5,7 @@ pre-commit:
       run: npx turbo run lint --output-logs=errors-only --filter=...[HEAD]
       stage_fixed: true
     format:
-      run: npx turbo run format --output-logs=errors-only --filter=...[HEAD]
+      run: npx prettier --write --ignore-unknown --log-level=warn {staged_files}
       stage_fixed: true
     test:
       run: npx turbo run test:staged --filter=...[HEAD]
@@ -25,6 +25,4 @@ pre-push:
       run: npx turbo run typecheck --filter=...[origin/main]
 
     packages-audit:
-      run:
-        echo "🔍 Rodando npm audit para vulnerabilidades de nível 'high' ou superior..."
-        npm audit --audit-level=high
+      run: npx audit-ci
