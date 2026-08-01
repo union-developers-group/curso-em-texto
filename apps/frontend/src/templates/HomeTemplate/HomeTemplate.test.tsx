@@ -1,6 +1,8 @@
+import { courseCardMocks } from '@/components/shared/CourseCard/CourseCard.mock';
 import { render, screen } from '@testing-library/react';
 import { HomeTemplate } from '@/templates/HomeTemplate';
-import { vitest } from 'vitest';
+import { useAuth } from '@/contexts/AuthContext';
+import { vitest, vi } from 'vitest';
 
 vitest.mock('@/components/shared/Hero', () => ({
   Hero: () => <section aria-label="Hero" />,
@@ -10,15 +12,36 @@ vitest.mock('@/components/shared/Footer', () => ({
   Footer: () => <footer aria-label="Footer" />,
 }));
 
+vitest.mock('@/contexts/AuthContext', () => ({
+  useAuth: vi.fn(),
+}));
+
+const mockedUseAuth = vi.mocked(useAuth);
+
+const mockAuth = (isAuthenticated: boolean) => {
+  mockedUseAuth.mockReturnValue({
+    login: vi.fn(),
+    logout: vi.fn(),
+    isAuthenticated: () => isAuthenticated,
+  });
+};
+
+const renderHomeTemplate = () =>
+  render(<HomeTemplate courses={courseCardMocks} />);
+
 describe('<HomeTemplate />', () => {
+  beforeEach(() => {
+    mockAuth(false);
+  });
+
   it('should render the Hero component', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(screen.getByRole('region', { name: 'Hero' })).toBeInTheDocument();
   });
 
   it('should render the CTA section', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.getByRole('heading', {
@@ -27,8 +50,48 @@ describe('<HomeTemplate />', () => {
     ).toBeInTheDocument();
   });
 
+  it('should render the featured courses section when user is not authenticated', () => {
+    renderHomeTemplate();
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Cursos em Destaque',
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Ver todos os cursos' })
+    ).toHaveAttribute('href', '/cursos');
+    expect(screen.getAllByRole('article')).toHaveLength(3);
+  });
+
+  it('should not render the learning journey section when user is not authenticated', () => {
+    renderHomeTemplate();
+
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Sua Jornada de Aprendizado',
+      })
+    ).not.toBeInTheDocument();
+  });
+
+  it('should render the learning journey section when user is authenticated', () => {
+    mockAuth(true);
+
+    renderHomeTemplate();
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Sua Jornada de Aprendizado',
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('link', { name: 'Ver todos os cursos' })
+    ).toHaveLength(2);
+    expect(screen.getAllByRole('article')).toHaveLength(6);
+  });
+
   it('should render the Footer component', () => {
-    render(<HomeTemplate />);
+    renderHomeTemplate();
 
     expect(
       screen.getByRole('contentinfo', { name: 'Footer' })

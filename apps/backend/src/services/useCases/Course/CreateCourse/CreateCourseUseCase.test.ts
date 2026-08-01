@@ -1,95 +1,21 @@
-import type { CourseModelData } from '@/data/models/Course';
-import type { UserModelData } from '@/data/models/User';
-import type {
-  CourseRepository,
-  CreateCourseData,
-} from '@/data/repositories/interfaces/CourseRepository';
-import type { Validator } from '@/services/contracts/Validator';
+import {
+  courseAuthorMock,
+  courseDataMock as createdCourseMock,
+  CourseRepositoryStub,
+} from '@/__tests__/stubs/repositories/CourseRepositoryStub';
+import { ValidatorStub } from '@/__tests__/stubs/ValidatorStub';
 
 import {
   CreateCourseInputType,
   CreateCourseUseCase,
 } from './CreateCourseUseCase';
 
-const authorMock: UserModelData = {
-  id: 'author-id',
-  email: 'author@example.com',
-  name: 'Course Author',
-  role: 'teacher',
-  isActive: true,
-  createdAt: new Date('2026-01-01T00:00:00.000Z'),
-  updatedAt: new Date('2026-01-01T00:00:00.000Z'),
-};
-
 const courseDataMock: CreateCourseInputType = {
   title: 'Curso Completo de Node.js',
   description:
     'Descricao completa do curso com conteudo suficiente para validar a regra de tamanho minimo.',
-  authorId: authorMock.id,
+  authorId: courseAuthorMock.id,
 };
-
-const createdCourseMock: CourseModelData = {
-  id: 'course-id',
-  title: courseDataMock.title,
-  slug: 'curso-completo-de-nodejs',
-  description: courseDataMock.description,
-  shortDescription: null,
-  authorId: courseDataMock.authorId,
-  tags: null,
-  difficulty: 'beginner',
-  estimatedHours: 0,
-  status: 'draft',
-  isPublic: false,
-  enrollmentCount: 0,
-  createdAt: new Date('2026-01-01T00:00:00.000Z'),
-  updatedAt: new Date('2026-01-01T00:00:00.000Z'),
-};
-
-class ValidatorStub implements Validator {
-  isEmail(): boolean {
-    return true;
-  }
-
-  isValidTitle(value: string): boolean {
-    return value.length >= 5 && value.length <= 255;
-  }
-
-  isValidDescription(value: string): boolean {
-    return value.length >= 50;
-  }
-
-  isValidShortDescription(value: string): boolean {
-    return value.length <= 500;
-  }
-}
-
-class CourseRepositoryStub implements CourseRepository {
-  async create(data: CreateCourseData): Promise<CourseModelData> {
-    return {
-      ...createdCourseMock,
-      ...data,
-    };
-  }
-
-  async findAuthorById(): Promise<UserModelData | null> {
-    return authorMock;
-  }
-
-  async findBySlug(): Promise<CourseModelData | null> {
-    return null;
-  }
-
-  async findById(id: string): Promise<CourseModelData | null> {
-    return id === createdCourseMock.id ? createdCourseMock : null;
-  }
-
-  async update(
-    _: string,
-    __: Partial<CourseModelData>
-  ): Promise<CourseModelData> {
-    return createdCourseMock;
-  }
-}
 
 const makeSut = () => {
   const validatorStub = new ValidatorStub();
@@ -178,7 +104,9 @@ describe('CreateCourseUseCase', () => {
   it('should return error if title does not contain between 5 and 255 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
-    const spyOnIsValidTitle = vitest.spyOn(validatorStub, 'isValidTitle');
+    const spyOnIsValidTitle = vitest
+      .spyOn(validatorStub, 'isValidTitle')
+      .mockReturnValueOnce(false);
 
     const response = await sut.execute({
       ...courseDataMock,
@@ -195,10 +123,9 @@ describe('CreateCourseUseCase', () => {
   it('should return error if description does not contain at least 50 characters', async () => {
     const { sut, validatorStub } = makeSut();
 
-    const spyOnIsValidDescription = vitest.spyOn(
-      validatorStub,
-      'isValidDescription'
-    );
+    const spyOnIsValidDescription = vitest
+      .spyOn(validatorStub, 'isValidDescription')
+      .mockReturnValueOnce(false);
 
     const response = await sut.execute({
       ...courseDataMock,
@@ -271,10 +198,9 @@ describe('CreateCourseUseCase', () => {
     const { sut, validatorStub } = makeSut();
 
     const shortDescription = 'a'.repeat(501);
-    const spyOnIsValidShortDescription = vitest.spyOn(
-      validatorStub,
-      'isValidShortDescription'
-    );
+    const spyOnIsValidShortDescription = vitest
+      .spyOn(validatorStub, 'isValidShortDescription')
+      .mockReturnValueOnce(false);
 
     const response = await sut.execute({
       ...courseDataMock,
@@ -408,7 +334,7 @@ describe('CreateCourseUseCase', () => {
 
     expect(spyOnCreate).toHaveBeenCalledWith({
       ...courseDataMock,
-      slug: createdCourseMock.slug,
+      slug: 'curso-completo-de-nodejs',
       tags: undefined,
       shortDescription: undefined,
       difficulty: 'beginner',

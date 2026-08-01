@@ -1,0 +1,12 @@
+{
+  "high": true,
+  "allow": [
+    "GHSA-mh99-v99m-4gvg",
+    "GHSA-g7r4-m6w7-qqqr",
+    "GHSA-qx2v-qp2m-jg93",
+    "GHSA-6g55-p6wh-862q",
+    "GHSA-r28c-9q8g-f849",
+    "GHSA-f88m-g3jw-g9cj",
+  ],
+  "report-type": "full",
+}
