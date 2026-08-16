@@ -81,4 +81,14 @@ export class CourseRepositoryStub implements CourseRepository {
       isPublic: data.isPublic ?? courseDataMock.isPublic,
     };
   }
+
+  async update(
+    _: string,
+    data: Partial<CourseModelData>
+  ): Promise<CourseModelData> {
+    return {
+      ...courseDataMock,
+      ...data,
+    };
+  }
 }
