@@ -1,18 +1,32 @@
 'use client';
 
+import { HighlightCard } from '@/components/shared/HighlightCard';
+
+import { highlightCardMocks } from '@/components/shared/HighlightCard/HighlightCard.mock';
+
 import type { CourseCardProps } from '@/components/shared/CourseCard';
+
 import { CourseCard } from '@/components/shared/CourseCard';
+
 import { buttonVariants } from '@/components/ui/Button';
+
 import { Fragment, useSyncExternalStore } from 'react';
+
 import { Footer } from '@/components/shared/Footer';
+
 import { useAuth } from '@/contexts/AuthContext';
+
 import { Hero } from '@/components/shared/Hero';
+
 import { ArrowRight } from 'lucide-react';
+
 import { cn } from '@/utils/cn';
+
 import Link from 'next/link';
 
 const subscribeAuthChange = (callback: () => void) => {
   window.addEventListener('auth-change', callback);
+
   return () => window.removeEventListener('auth-change', callback);
 };
 
@@ -33,6 +47,30 @@ export const HomeTemplate = ({ courses }: HomeTemplateProps) => {
     <Fragment>
       <main className="flex-1">
         <Hero />
+
+        <section
+          aria-labelledby="highlights-title"
+          className="w-full bg-background-500 px-6 py-16 sm:px-8 md:px-12 lg:px-20 lg:py-24"
+        >
+          <div className="mx-auto flex w-full max-w-[1107px] flex-col gap-10.5">
+            <h2
+              id="highlights-title"
+              className="text-center text-2xl leading-8 font-medium tracking-normal text-gray-50"
+            >
+              Por que escolher aprendizado baseado em texto?
+            </h2>
+
+            <div className="flex gap-[42px]">
+              {highlightCardMocks.map((highlight) => (
+                <HighlightCard
+                  key={highlight.title}
+                  {...highlight}
+                  className="h-[226px] w-[341px]"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
 
         {isLoggedIn && (
           <section

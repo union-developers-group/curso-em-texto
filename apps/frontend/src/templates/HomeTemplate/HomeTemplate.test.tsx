@@ -1,7 +1,11 @@
 import { courseCardMocks } from '@/components/shared/CourseCard/CourseCard.mock';
+
 import { render, screen } from '@testing-library/react';
+
 import { HomeTemplate } from '@/templates/HomeTemplate';
+
 import { useAuth } from '@/contexts/AuthContext';
+
 import { vitest, vi } from 'vitest';
 
 vitest.mock('@/components/shared/Hero', () => ({
@@ -40,6 +44,29 @@ describe('<HomeTemplate />', () => {
     expect(screen.getByRole('region', { name: 'Hero' })).toBeInTheDocument();
   });
 
+  it('should render the highlights section', () => {
+    renderHomeTemplate();
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Por que escolher aprendizado baseado em texto?',
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('should render the highlight cards', () => {
+    renderHomeTemplate();
+
+    expect(screen.getAllByTestId('highlight-card')).toHaveLength(3);
+
+    expect(
+      screen.getByText('Aprenda no Seu Próprio Ritmo')
+    ).toBeInTheDocument();
+
+    expect(screen.getByText('Conteúdo Focado')).toBeInTheDocument();
+    expect(screen.getByText('Retenha Conhecimento')).toBeInTheDocument();
+  });
+
   it('should render the CTA section', () => {
     renderHomeTemplate();
 
@@ -58,10 +85,12 @@ describe('<HomeTemplate />', () => {
         name: 'Cursos em Destaque',
       })
     ).toBeInTheDocument();
+
     expect(
       screen.getByRole('link', { name: 'Ver todos os cursos' })
     ).toHaveAttribute('href', '/cursos');
-    expect(screen.getAllByRole('article')).toHaveLength(3);
+
+    expect(screen.getAllByTestId('course-card')).toHaveLength(3);
   });
 
   it('should not render the learning journey section when user is not authenticated', () => {
@@ -84,10 +113,12 @@ describe('<HomeTemplate />', () => {
         name: 'Sua Jornada de Aprendizado',
       })
     ).toBeInTheDocument();
+
     expect(
       screen.getAllByRole('link', { name: 'Ver todos os cursos' })
     ).toHaveLength(2);
-    expect(screen.getAllByRole('article')).toHaveLength(6);
+
+    expect(screen.getAllByTestId('course-card')).toHaveLength(6);
   });
 
   it('should render the Footer component', () => {
